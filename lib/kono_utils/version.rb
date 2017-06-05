@@ -1,3 +1,3 @@
 module KonoUtils
-  VERSION = '0.15.5'
+  VERSION = '0.15.7'
 end
