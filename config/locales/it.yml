@@ -1,0 +1,18 @@
+it:
+  back: Indietro
+  new: Nuovo
+  newa: Nuova
+  edit: Modifica
+  del: Cancella
+  wait: "Wait..."
+  are_you_sure: "Confermi la cancellazione?"
+  formtastic:
+    inputs:
+      bs_file_download:
+        download: Download
+  activerecord:
+    successful:
+      messages:
+        created: "%{model} creato correttamente."
+        updated: "%{model} aggiornato correttamente."
+        destroyed: "%{model} è stato correttamente cancellato."

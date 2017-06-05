@@ -1,0 +1,36 @@
+<%= render 'index_page_title_header' %>
+<%= render 'index_page_side_title_header' %>
+
+<%= render 'search_form' unless @search.nil? %>
+
+<table class="table table-bordered table-hover">
+  <thead>
+  <tr>
+    <% table_columns.each do |t| %>
+        <%= index_column_builder(t, :th) do %>
+            <%= index_print_column_head(t) %>
+        <% end %>
+    <% end %>
+    <th class="index-col-btn"></th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @objects.each do |r| %>
+      <tr>
+        <% table_columns.each do |t| %>
+            <%= index_column_builder(t, :td, record: r) do %>
+                <%= index_print_column(r, t) %>
+            <% end %>
+        <% end %>
+        <th class="index-col-btn">
+          <%= render 'index_buttons', record: r %>
+        </th>
+      </tr>
+  <% end %>
+  </tbody>
+  <%= render 'index_tfoot' %>
+</table>
+
+<%= will_paginate_bst(@objects) %>
+

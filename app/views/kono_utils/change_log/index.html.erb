@@ -1,0 +1,3 @@
+<% content_for :title, t('.title', :default => 'Changelog') %>
+
+<%=raw RDiscount.new(File.open(Rails.root.join('CHANGELOG.md')).read).to_html %>

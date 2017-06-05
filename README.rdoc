@@ -1,0 +1,442 @@
+= KonoUtils
+
+Progetto contenente una serie di classi, debitamente documentata che debbono servire da
+libreria di utilità per i vari progetti utilizzati da Archimedia.
+
+== Installazione
+ aggiungere nel proprio gemfile
+ source 'https://rails-assets.org'
+
+ gem 'kono_utils'
+
+ per avere anche le utilities in javascript:
+ require kono_utils/utilities
+
+== Controllers/Views
+
+=== ChangeLog
+  Aggungere una rotta all'applicativo
+  get '/changelog', to: 'kono_utils/change_log#index', as: :changelog
+
+  Aggiungere un file nella root del progetto:
+  CHANGELOG.md
+
+  contenuto esempio:
+  <code>
+    ##Legenda:
+    - Feature       -> Novità
+    - Bug           -> Risoluzione problema
+    - Improvement   -> Migliorira
+
+    ##Versioni
+    ### XX.XX.XX
+    -  **Bug**              lorem
+    -  **Improvement**      lorem
+    -  **Feature**          lorem
+  </code>
+
+== TmpFile
+ Classe Funzionante prettamente con RAILS
+
+ La classe si occupa dei files temporanei creando una cartella dentro a tmp del progetto,
+ per ovviare al problema di duplicazioni dei nomi, viene generata una nuova cartella con
+ timestamp univoco per ogni file.
+
+ Estende Tempfile,
+ la root della struttura è quella di Rails.root
+ e di default la classe scrive dentro a tmp della root di rails.
+
+ Non c'è bisogno di preoccuparsi di svuotare la cartella tmp contenente i file temporanei dato che la classe
+ avrà l'onere di controllare e ripulire eventuali files dopo 1.day di default.
+
+=== Utilizzo:
+ tmp = KonoUtils::TmpFile.new('nomefile.ext')
+ tmp.path -> path completa
+ tmp.write(valore_da_scrivere_dentro_a_file)
+ tmp.original_filename -> restituisce il nome inizialmente passato alla classe
+ tmp.unique_filename   -> restoituisce il nome univoco del file
+ tmp.path              -> restituisce la path del file
+
+
+
+== Encoder
+ Classe che si occupa di decodificare una qualsiasi stringa in formato utf8,
+ cercando di trovare l'encoding iniziale a tentativi.
+ Ha anche a disposizione una funzione per la rimozione dei caratteri BOM dalla stringa(http://en.wikipedia.org/wiki/Byte_order_mark)
+
+=== Utilizzo
+ str="stringa di un encoding sconosciuto"
+ en = KonoUtils::Encoder.new(str)
+ en.string_encoder  -> normale tentativo di encoding restituendo stringa in utf8
+ en.remove_bom      -> rimozione del carattere BOM e encoding con la funzione precedente
+
+== Percentage
+ Classe che si occupa di rappresentare un numero in percentuale.
+ Per maggiori info sulle funzionalità controllare la documentazione sulla classe
+
+=== Utilizzo
+ p = KonoUtils::Percentage.new(100,20)
+ p.percentage -> ritorna il valore percentuale float
+ p.to_i -> ritorna percentuale intera con relativi arrotondamenti
+ p.to_percentage -> si comporta come l'helper number_to_percentage
+
+== Params Hash Array
+
+ Si occupa di trasformare un hash con elementi che sono chiramente array in un hash con elementi array:
+
+ {"DatiOrdineAcquisto"=>{"0"=>{"RiferimentoNumeroLinea"=>{"0"=>""}, "IdDocumento"=>"", "Data"=>"", "NumItem"=>"", "CodiceCommessaConvenzione"=>"", "CodiceCUP"=>"", "CodiceCIG"=>""}}}
+ {"DatiOrdineAcquisto"=>[{"RiferimentoNumeroLinea"=>[""], "IdDocumento"=>"", "Data"=>"", "NumItem"=>"", "CodiceCommessaConvenzione"=>"", "CodiceCUP"=>"", "CodiceCIG"=>""}]}
+
+=== Utilizzo
+ includere nel controller o dove si vuole utilizzare il concern
+ include KonoUtils::ParamsHashArray
+
+ e richiamare la funzione:
+ elaborate_params_to_hash_array(params)
+
+== Virtual Model
+ Server per avere un modello virtuale in Rails
+
+=== Utilizzo
+  Praticamente è come avere un active record ma senza avere una tabella
+
+  class Session < KonoUtils::VirtualModel
+
+    attr_accessor :username, :password, :token
+
+
+    validates :token,:presence=>true
+
+  end
+
+  Session.new(:username=>'ciao',:password=>'pippo').valid? => false
+
+== BaseSearch
+    Classe per semplificare il sistema di organizzazione dei modelli di ricerca, unendo anche la
+    configurazione della form di ricerca utilizzando l'helper search_form
+
+=== Utilizzo
+
+     TODO completare spiegazione utilizzo(vedi commenti classe)
+
+    Creare una classe modello per gestire la ricerca partendo da BaseSearch
+
+    module Admin::PariteticEntities
+      class Search < KonoUtils::BaseSearch
+
+        set_search_model Admin::PariteticEntity  -> settare il modello a cui si vuole eseguire effettivamente la ricerca
+                                                    dovrà contenete uno scope: search che può ricevere un hash di campi da ricercare,
+                                                    questo hash conterrà tutti i campi sotto definiti, volendo anche con casting passato
+                                                    attraverso il set_search_attributes
+
+        set_search_attributes :name              -> in questo modo settiamo i campi da ricercare, per maggiori
+                                                    informazioni guardare i commenti di questo metodo
+
+      end
+    end
+
+    è possibile poi, una volta creata l'istanza della ricerca definirle uno scope preciso:
+    @search = PariteticEntities::Search.new
+
+    @search.scope = policy_scope(PariteticEntity)
+    o
+    @search.scope = PariteticEntity.where(:name=>10)
+
+    quando si devono settare i parametri provenienti dalla form li carichiamo in questo modo:
+    @search.update_attributes(params.require(:campo_della_ricerca).permit(:name))
+
+    Esempio di scope nel modello Admin::PariteticEntity
+    ##
+    # Ricerca
+    #
+    # * *Args*    :
+    #   - search_query -> Hash of:
+    #                       name: ricerca libera sul nome %nome%
+    scope :search, ->(search_query) {
+
+      unless search_query[:name].blank?
+        where(self.arel_table[:name].matches("%#{search_query[:name]}%"))
+      end
+
+    }
+
+== Concerns
+
+=== ActiveRecordTranslation
+    Serve per aggiungere ad Active Record funzioni corte per la traduzione, includere in un'inizializzatore
+
+        ActiveRecord::Base.include KonoUtils::Concerns::ActiveRecordTranslation
+
+=== SuccessMessage
+    Include 3 funzioni da poter utilizzare per stampare il messaggio di default di conferma
+    salvataggio,cancellazione,aggiornamento di un modello come notice in un controller:
+
+           .., :notice=>success_create_message(model)
+           .., :notice=>success_update_message(model)
+           .., :notice=>success_destroy_message(model)
+
+=== Base Modals
+   Un Concern per poter semplificare la vita al controller di salvataggio dati da modals
+
+==== Utilizzo
+    class Buildings::FloorsController < ApplicationController
+      include KonoUtils::Concerns::BaseModals
+
+      def create
+        @obj = @parent_model.floors.build(update_params)
+        super
+      end
+
+      private
+
+      def load_obj
+        @obj = @parent_model.floors.find(params[:id])
+      end
+
+      def update_params
+        params.require(:floor).permit(:name)
+      end
+
+      def save_response
+        respond_to do |f|
+          if @obj.valid?
+            @obj.save
+            f.json do
+              render_part_to_json('buildings/floors/panel.html', {:piano => @obj})
+            end
+          else
+            f.json do
+              render_part_to_json('buildings/floors/modal_form.html', {:piano => @obj, :id => ''}, 400)
+            end
+          end
+        end
+      end
+
+      def load_parent_assoc
+        @parent_model = Building.find(params[:building_id])
+      end
+
+    end
+
+    #TODO inserire documentazione o generatori per creare codice velocemente, con javascript (Kn.utilities.BasePannel)
+    # e viste con row modal ecc
+
+=== Base Editing
+   Un Concern che racchiude tutte le funzionalità base generalizzate per la gestione di un modello
+
+==== Utilizzo
+   Includere in un controller da cui derivare tutti i controller dei modelli da editare questo concern chiamandolo BaseEditingController
+   include KonoUtils::Concerns::BaseEditing
+   creare un helper per questo controller e inserirci il modulo degli helper
+   include KonoUtils::BaseEditingHelper
+   nelle policies poi creare una policy che includa KonoUtils::BaseEditingPolicyConcern
+   da cui poi derivare tutte le altre
+
+== Application Helper
+  Modulo che include varie utilities da poter utilizzare:
+=== Utilizzo
+
+====  will_paginate_bst
+    esegue will_paginate con il renderer per bootstrap
+    <%=will_paginate_bst(collection)%>
+
+==== namespace_content
+    genera un div contenitore con la classi derivate da controller e azione
+     <%= namespace_content do %>
+        <%= yield %>
+     <% end %>
+==== true_false_label
+     stampa un label per bootstrap con true o false rispetto al valore passato
+     <%= true_false_label(true) %> =>
+
+==== bootstrap_please_wait
+     Genera una modal da riutilizzare per far aspettare determinate operazioni al client
+     <%= bootstrap_please_wait %>
+     Ricordarsi di aggiungere nel JS:
+       $('#processing_wait').modal()            -> per visualizzarlo
+       $('#processing_wait').modal('hide')      -> per nasconderlo
+
+==== search_form
+     Genera una form di ricerca con bootstrap, utilizzando la classe BaseSearch.
+
+     TODO completare spiegazione utilizzo(vedi commenti classe)
+
+==== print_rescue_date
+     Stampa la data standard se questa non è nil
+
+==== title_mod(model)
+     Scrive il titolo per modifica del modello
+==== title_new(model)
+     Scrive il titolo per new del modello
+==== title_newa(model)
+     Scrive il titolo per il modello al femminile
+==== enum_collection
+     Genera l'hash da passare come collection alle selectbox, esegue anche la traduzione con locale
+==== enum_translation
+     Si occupa di tradurre un determinato valore di un enum
+     Le traduzioni dentro al locale devono essere fatte in questo modo:
+
+      it:
+        activerecord:
+          attributes:
+            estimate_before/value:
+              na: NA
+              very_insufficient: 1
+              insufficient: 2
+              sufficient: 3
+              excellent: 4
+
+      dove in questo caso  estimate_before è il modello e value è il nome del campo enum
+
+==== modal_form_generator
+     Si occupa di gnerare una modal di bootstrap con all'interno una form
+
+     ES:
+     <%= modal_form_generator(id: id, title: student.mn, form_cfgs: [[school_turn, student]]) do |f| %>
+         <%= f.input :person, as: :select, collection: school_turn.possible_students.collect { |p| [p.nominativo, p.id] } %>
+         <%= f.input :year, as: :bs_readonly, :display_field => :nome %>
+
+         <%= render 'tikal_dish_core/school_turns/turns_row.html', f: f %>
+     <% end %>
+
+     possibile anche passare una proc per generare i bottoni della modal in modo differente dallo standard, vedere documentazione
+
+==== modal_edit_button
+     Genera il bottone per editazione con una modal del contenuto,
+     gli viene passato un block contenente la modal da lanciare per l'editazione,
+     solitamente generata con modal_form_generator.
+     come parametri viene passato l'id del target che si aspetta di richiamare
+     <code>
+     ES:
+      modal_edit_button do |id|
+        render 'tikal_core/people/person_contacts/modal_form', :contact => contact, :id => id %>
+      end
+
+     Options:
+
+        - align: left|rigth
+        - updatable_content: elemento da rimpiazzare con il partial restituito
+        - class: classi aggiuntive per selezionare meglio il bottone
+        - bnt_icon: Symbol che identifica che icona utilizzare per il bottone
+     </code>
+
+==== modal_delete_button
+     Genera il bottone per la cancellazione di un record, viene creata una relativa modal
+     per la conferma
+     <code>
+     ES:
+     <%= modal_delete_button(cliente_referente_path(referente.cliente, referente, :json),
+                                callback_remove: "##{id}",
+                                :bnt_icon => 'times fw') %>
+
+
+      modal_delete_button(path, [options])
+      path -> resource to delete
+      options:
+       *  confirm         : Text to display in modal
+       *  align           : left|right
+       *  callback_remove : id dell'elemento da rimuove una volta avuto successo il javascript di cancellazione
+       *  bnt_icon        : Symbol che identifica che icona utilizzare per il bottone [:times]
+     </code>
+
+==== multiple_elements_table
+     Genera la struttura di una tabella per la gestione dei campi nested multipli.
+     multiple_elements_table( "form di formtastic","relazione nel modello nested","elenco campi da visualizzare")
+     possibile blocco: vedi docs
+     <code>
+        <%= f.inputs :name => PriceRange.mnp, class: 'form-inline CLASSE_CONTAINER' do %>
+            <%= multiple_elements_table(f, :price_ranges, [:from_val, :to_val, :price]) %>
+        <% end %>
+     </code>
+     Ricordarsi poi di aggiungere negli assets anche la funzione per duplicare le righe e per cancellarle
+     <code>
+          $('.CLASSE_CONTAINER').multiple_table()
+     </code>
+     Nel modello dobbiamo inserire i comandi per il nested:
+     <code>
+         has_many :price_ranges, :dependent => :destroy
+         accepts_nested_attributes_for :price_ranges, allow_destroy: true
+         validates_associated :price_ranges
+     </code>
+     Nella policy/controller dobbiamo preoccuparci di avere anche i permitted attributes corretti
+     <code>
+        :price_ranges_attributes => [:from_val, :to_val, :price, :id, :_destroy]
+     </code>
+
+=== bs_tree
+     Genera un'albero con bootstrap-tree
+     deve ricevere un array di dati da trasformare in json.
+     per come scrivere il parametro data vedi
+     https://github.com/jonmiles/bootstrap-treeview
+     <code>
+     bs_tree(
+              [
+                {
+                    :text => 'ciao',
+                    state:
+                    {
+                        expanded: false
+                    },
+                    nodes:
+                    [
+                        {
+                            text: 'pipo'
+                        }
+                    ]
+                },
+                {
+                    :text => 'marino'
+                }
+              ]
+             )
+     </code>
+
+== Inputs Formtastic per bootstrap
+   Una serie di inputs per formtastic con bootstrap
+===Utilizzo
+   Ricordiamo di mettere kono_utils come gemma sucessivamente a formtastic.
+   se si vogliono anche gli input :
+    bs_aceeditor
+    bs_datetimepicker        inject_js => True|False|Hash per ozioni js
+                                                - server_format: 'YYYY-MM-DD',
+                                                - server_match: '/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/',
+                                                - format: 'DD/MM/YYYY HH:mm'
+    bs_datepicker             Come il bs_datetimepicker_input ma con già presenti i settaggi corretti
+    bs_readonly
+    bs_file_download          visualizza un campo per il caricamento dei files e il relativo bottone di download
+    bs_image                  visualizza campo caricamento e in parte l'immagine caricata se caricata
+    bs_label_with_container   Rende possibile inserire dentro al contenitore della input un qualsiasi
+                                    contenuto tramite una proc passata come opzione :content
+                                    <code>
+                                    content: Proc.new {
+                                        bf = ActiveSupport::SafeBuffer.new
+
+                                        bf<< f.file_field(:convenz_document)
+
+                                        bf
+                                      }
+                                    </code>
+    bs_timepicker
+   serve includere anche la gemma:
+     gem 'font-awesome-rails', '~> 4.3.0' #https://github.com/bokmann/font-awesome-rails
+
+= Utilities Style CSS
+
+== Spacer
+   classi per una spaziatura verticale , utilizzare
+   passando la classe generale v-space e poi il valore scelto: space-x1
+   ogni valore dello spacer rappresente 0.2em
+   da 1 a 20 come valore di moltiplicatore
+
+=== Utilizzo
+    <div class="kono-v-spacer space-x2"></div>     => 0.4em
+
+== Fiscal code
+   Classe KonoUtils::FiscalCode per verificare validità codice fiscale e partita iva dai rispettivi caratteri fi controllo
+
+=== Utilizzo
+    KonoUtils::FiscalCode::ControllaCF(codice_fiscale, strict = false) Controllo dell'esattezza del codice fiscale
+    verificando il carattere di controllo
+    KonoUtils::FiscalCode::ControllaPI(partita_iva) Controllo dell'esattezza della partita iva dal carattere di controllo
+    Inoltre rispetto a questo argomento è stata aggiunta anche la gemma codice-fiscale https://github.com/topac/codice_fiscale
+    Che permette di calcolare il codice fiscale partendo dai dati anagrafici di una persona.

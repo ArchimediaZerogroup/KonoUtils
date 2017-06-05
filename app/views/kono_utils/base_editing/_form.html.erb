@@ -1,0 +1,15 @@
+<%= semantic_form_for(*semantic_form_attributes(@object)) do |f| %>
+
+    <div class="row">
+      <% form_attributes(@object).each do |field| %>
+
+          <div class="<%= cell_column_class(field) %>">
+            <%= editing_form_print_field(f, field) %>
+          </div>
+
+      <% end %>
+    </div>
+
+    <%= form_submit f %>
+
+<% end %>
