@@ -1,5 +1,7 @@
 = KonoUtils
 
+{<img src="https://badge.fury.io/rb/kono_utils.png" alt="Gem Version" />}[https://badge.fury.io/rb/kono_utils]
+
 Progetto contenente una serie di classi, debitamente documentata che debbono servire da
 libreria di utilità per i vari progetti utilizzati da Archimedia.
 
