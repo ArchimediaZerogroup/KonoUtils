@@ -1,0 +1,36 @@
+<div class="panel panel-default search_panel">
+  <div class="panel-heading">
+    <h3 class="panel-title collapse_search">
+      <span><%= t(:search) %></span>
+      <div class="pull-right icon-search">
+        <%= fa_icon("search") %>
+        <span class="caret"></span>
+      </div>
+    </h3>
+  </div>
+
+
+  <div class="collapsible_panel <%= search_model.data_loaded? ? 'uncollapsed' : '' %>">
+    <div class="panel-body">
+      <%= form.fields_builder(:field_options => field_option) %>
+    </div>
+
+    <div class="panel-footer text-right">
+
+      <%= button_tag(t(:search), type: "submit", class: "btn btn-primary") %>
+
+      <% if search_model.data_loaded? and !reset_path.nil? %>
+          <%= link_to(content_tag(:span, nil, class: 'glyphicon glyphicon-remove'), reset_path, class: 'btn btn-info') %>
+      <% end %>
+
+
+      <% bf = ActiveSupport::SafeBuffer.new
+         buttons_editor.call(form, bf)
+      %>
+      <%= bf %>
+
+
+    </div>
+  </div>
+
+</div>

@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    kono_utils (0.15.5)
+    kono_utils (0.15.7)
       actionview
       active_type
       bootstrap3-datetimepicker-rails (~> 4.17.42)
@@ -39,7 +39,7 @@ GEM
       erubis (~> 2.7.0)
       rails-dom-testing (~> 1.0, >= 1.0.5)
       rails-html-sanitizer (~> 1.0, >= 1.0.2)
-    active_type (0.7.0)
+    active_type (0.7.1)
       activerecord (>= 3.2)
     activejob (4.2.4)
       activesupport (= 4.2.4)
@@ -153,7 +153,7 @@ GEM
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     underscore-rails (1.8.3)
-    will_paginate (3.1.5)
+    will_paginate (3.1.6)
     will_paginate-bootstrap (1.0.1)
       will_paginate (>= 3.0.3)
 
@@ -168,4 +168,4 @@ DEPENDENCIES
   sqlite3
 
 BUNDLED WITH
-   1.13.6
+   1.15.1
