@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.version = KonoUtils::VERSION
   s.authors = ["Marino"]
   s.email = ["marino.bonetti@archimedianet.it"]
-  s.homepage = "http://gitlab.archimedianet.it/kono/KonoUtils"
+  s.homepage = "https://github.com/ArchimediaZerogroup/KonoUtils"
   s.summary = "Kono Utilities"
   s.description = "Gemma per che raccoglie varie tipologie di classi di utilità varia che possono servire al funzionamento delle applicazioni e semplificare la vita al programmatore Rails"
   s.license = "MIT"
