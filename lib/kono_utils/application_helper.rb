@@ -82,57 +82,17 @@ module KonoUtils
           :reset_path => nil,
           :form_opts => {},
           :field_option => {:wrapper_html => {:class => "col-xs-12 col-sm-6 col-md-4 col-lg-3"}},
-          :buttons_editor => Proc.new { |form_obj, sb| sb }
+          :buttons_editor => Proc.new {|form_obj, sb| sb}
       }.merge(args)
 
-      reset_path = args[:reset_path]
-
-      field_option = args[:field_option]
-
       base_search_form_wrapper(search_model, {:attributes => args[:attributes], :form_opts => args[:form_opts]}) do |f|
-        content_tag :div, class: "panel panel-default search_panel" do
 
-          buffer = ActiveSupport::SafeBuffer.new
+        render :partial => '/application/search_panel.html', locals: {
+            form: f,
+            search_model: search_model
+        }.merge(args)
 
-          buffer<< content_tag(:div, class: 'panel-heading') do
-            content_tag :h3, class: "panel-title collapse_search" do
-              header = ActiveSupport::SafeBuffer.new
-
-              header<< content_tag(:span, t(:search))
-
-              header<<content_tag(:div, fa_icon("search") + content_tag(:span, nil, class: 'caret'), class: 'pull-right icon-search')
-
-              header
-            end
-          end
-
-          buffer<< content_tag(:div, class: "collapsible_panel #{(search_model.data_loaded? ? 'uncollapsed' : '')}") do
-            fb_collapse = ActiveSupport::SafeBuffer.new
-
-            fb_collapse << content_tag(:div, class: "panel-body") do
-              f.fields_builder(:field_options => field_option)
-            end
-
-
-            fb_collapse << content_tag(:div, class: 'panel-footer text-right') do
-              form_buffer = ActiveSupport::SafeBuffer.new
-
-              form_buffer<< button_tag(t(:search), type: "submit", class: "btn btn-primary")
-
-              if search_model.data_loaded? and !reset_path.nil?
-                form_buffer<< link_to(content_tag(:span, nil, class: 'glyphicon glyphicon-remove'), reset_path, class: 'btn btn-info')
-              end
-
-              args[:buttons_editor].call(f, form_buffer)
-            end
-
-            fb_collapse
-          end
-
-          buffer
-        end
       end
-
 
     end
 
@@ -204,7 +164,7 @@ module KonoUtils
     #
     def enum_collection(model, attribute, variant=nil)
 
-      model.send(attribute.to_s.pluralize(2).to_sym).collect { |key, val|
+      model.send(attribute.to_s.pluralize(2).to_sym).collect {|key, val|
         [enum_translation(model, attribute, key, variant), key]
       }.to_h
     end
@@ -337,7 +297,7 @@ module KonoUtils
       content_tag :div, class: "kono_edit_button align-#{options[:align]} #{options[:class]}", :data => {updatable_content: options[:updatable_content]} do
         buffer = ActiveSupport::SafeBuffer.new
 
-        buffer << button_tag(data: {toggle: 'modal', target: "##{id}"}, class: "btn btn-default btn-xs #{options[:btn_class]}") { fa_icon(options[:bnt_icon]) }
+        buffer << button_tag(data: {toggle: 'modal', target: "##{id}"}, class: "btn btn-default btn-xs #{options[:btn_class]}") {fa_icon(options[:bnt_icon])}
 
         buffer << capture do
           block.call(id)
@@ -373,7 +333,7 @@ module KonoUtils
 
         buffer = ActiveSupport::SafeBuffer.new
 
-        buffer<<button_tag(data: {toggle: 'modal', target: "##{id}"}, class: 'btn btn-danger btn-xs') { fa_icon(options[:bnt_icon]) }
+        buffer<<button_tag(data: {toggle: 'modal', target: "##{id}"}, class: 'btn btn-danger btn-xs') {fa_icon(options[:bnt_icon])}
 
         buffer<< content_tag(:div,
                              class: 'modal fade',
@@ -417,7 +377,7 @@ module KonoUtils
     ##
     # Colleziona i mesi per la select box
     def month_collection
-      (1..12).collect { |m| [t('date.month_names')[m].capitalize, m] }
+      (1..12).collect {|m| [t('date.month_names')[m].capitalize, m]}
     end
 
 
@@ -531,10 +491,10 @@ module KonoUtils
             c = ActiveSupport::SafeBuffer.new
 
             fields.each do |f|
-              ::Rails.logger.debug { form.object.class.inspect }
-              ::Rails.logger.debug { field }
-              ::Rails.logger.debug { f.inspect }
-              c<<content_tag(:th, form.object.class.human_attribute_name("#{field}.#{f}"),class:"multi_tab_#{f}")
+              ::Rails.logger.debug {form.object.class.inspect}
+              ::Rails.logger.debug {field}
+              ::Rails.logger.debug {f.inspect}
+              c<<content_tag(:th, form.object.class.human_attribute_name("#{field}.#{f}"), class: "multi_tab_#{f}")
             end
             unless options[:disable_duplication]
               c<<content_tag(:td, nil)
@@ -547,14 +507,14 @@ module KonoUtils
         b<<content_tag(:tbody) do
           form.semantic_fields_for(*semantic_form_nested) do |measure|
 
-            default_execution = Proc.new { |field| measure.input field, :label => false }
+            default_execution = Proc.new {|field| measure.input field, :label => false}
 
             content_tag :tr, class: "form-inline list riga_misura" do
 
               d = ActiveSupport::SafeBuffer.new
 
               fields.each do |f|
-                d<<content_tag(:td,class:"multi_tab_#{f}") do
+                d<<content_tag(:td, class: "multi_tab_#{f}") do
 
                   if block_given?
                     yield(f, measure, default_execution)
