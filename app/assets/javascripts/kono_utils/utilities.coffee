@@ -197,6 +197,9 @@ elaborate_buttons = (tabella)->
 
 
 ## Gestione elementi multipli
+# Eventi sulla tabella:
+# - row_append  : lanciato quando viene appeso una nuova riga, parametri: tabella,riga appena aggiunta
+# - row_removed : lanciato quando viene rimossa una nuova riga, parametri: tabella,riga appena rimossa
 $.fn.extend
   multiple_table: (options) ->
 #    settings =
@@ -211,9 +214,11 @@ $.fn.extend
 
       $(tabella).on 'click', '.remove_row', (e)->
         e.preventDefault()
-        $(@).closest('tr').hide().addClass('multiple_table_remove_row')
+        row = $(@).closest('tr')
+        row.hide().addClass('multiple_table_remove_row')
         $(@).find('[type="hidden"]').val('true')
         elaborate_buttons(tabella)
+        $(tabella).trigger("row_removed", [tabella, row]);
 
       $(tabella).on 'click', '.add_one_more', (e)->
         e.preventDefault()
@@ -226,6 +231,7 @@ $.fn.extend
 
         row.appendTo($(@).closest('tbody'))
         elaborate_buttons(tabella)
+        $(tabella).trigger("row_append", [tabella, row]);
 
 ##fine
 
