@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    kono_utils (0.15.10)
+    kono_utils (0.15.11)
       actionview
       active_type
       bootstrap3-datetimepicker-rails (~> 4.17.42)
@@ -39,7 +39,7 @@ GEM
       erubis (~> 2.7.0)
       rails-dom-testing (~> 1.0, >= 1.0.5)
       rails-html-sanitizer (~> 1.0, >= 1.0.2)
-    active_type (0.7.1)
+    active_type (0.7.4)
       activerecord (>= 3.2)
     activejob (4.2.4)
       activesupport (= 4.2.4)
