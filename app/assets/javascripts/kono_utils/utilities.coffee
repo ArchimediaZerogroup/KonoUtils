@@ -40,13 +40,21 @@
 
 ###
 @Kn.view_ns = (selector, block) ->
-  $ ->
+#funzione da lanciare per il reload della pagina
+  esecutore = _.debounce(->
+#se abbiamo il selettore allora lancio il blocco
     if $(selector).length > 0
       block(selector)
-    else
-#      attacco ascoltatore event haschanged
-      $(window).on 'hashchange', ->
-        block(selector)
+  , 10, true)
+  #on ready
+  $ ->
+    esecutore()
+
+  #attacco ascoltatore event haschanged
+  $(window).on 'hashchange', esecutore
+
+  #Attacco evento anche per turbolinks
+  document.addEventListener("turbolinks:load", esecutore)
 
 
 ###
