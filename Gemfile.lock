@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    kono_utils (0.15.12)
+    kono_utils (0.15.14)
       actionview
       active_type
       bootstrap3-datetimepicker-rails (~> 4.17.42)
@@ -60,7 +60,7 @@ GEM
     bootstrap3-datetimepicker-rails (4.17.47)
       momentjs-rails (>= 2.8.1)
     builder (3.2.3)
-    codice-fiscale (0.0.8)
+    codice-fiscale (0.0.9)
       activemodel
       activesupport
     concurrent-ruby (1.0.5)
