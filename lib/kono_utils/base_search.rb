@@ -109,7 +109,7 @@ module KonoUtils
       self.class._search_attributes
     end
 
-    def initialize
+    def initialize(attributes = nil)
       raise UndefinedSearchModel if search_model.nil?
       super
       self.scope = self.class._search_model
