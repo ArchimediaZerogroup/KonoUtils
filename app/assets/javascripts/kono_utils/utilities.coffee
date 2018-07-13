@@ -237,6 +237,17 @@ $.fn.extend
           $(@).attr('name', name)
           $(@).removeAttr('disabled')
 
+        datapicker_containers= $(row).find(".tk_date_time_picker")
+        $(datapicker_containers).each (index,val) =>
+          new_id= $(val).attr("id").concat( new Date().getTime())
+          $(val).attr("id",new_id)
+
+          script = $(val).siblings("script")[0]
+          script_text = $(script).text();
+          new_script_text = script_text.replace(/'#.*'/,"'#"+new_id+"'")
+          script_parent= $(script).parent()
+          $(script).replaceWith('<script type=\'text/javascript\'>'+new_script_text+'</script>');
+
         row.appendTo($(@).closest('tbody'))
         elaborate_buttons(tabella)
         $(tabella).trigger("row_append", [tabella, row]);
