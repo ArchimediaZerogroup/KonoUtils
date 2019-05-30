@@ -21,6 +21,14 @@ libreria di utilità per i vari progetti utilizzati da Archimedia.
 
  require kono_utils/utilities
 
+== Upgrade From 0.x
+ After bundle update make
+
+ bin/rails g kono_utils:install
+
+ so you have the yarn packages appended
+
+
 == Controllers/Views
 
 === ChangeLog
