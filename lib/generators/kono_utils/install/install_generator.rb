@@ -20,7 +20,7 @@ module KonoUtils
     end
 
     def install_node_dependency
-      run "yarn add patternfly-bootstrap-treeview underscore"
+      run "yarn add patternfly-bootstrap-treeview"
     end
 
     def append_js_dependecy_to_assets

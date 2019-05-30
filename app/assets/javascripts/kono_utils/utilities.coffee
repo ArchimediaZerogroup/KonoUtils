@@ -1,4 +1,4 @@
-#= require underscore/underscore
+#= require underscore
 #= require EventEmitter
 #= require moment
 #= require bootstrap-datetimepicker

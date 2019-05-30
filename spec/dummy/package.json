@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "patternfly-bootstrap-treeview": "^2.1.8",
-    "underscore": "^1.9.1"
+    "patternfly-bootstrap-treeview": "^2.1.8"
   }
 }

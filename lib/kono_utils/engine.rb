@@ -7,6 +7,7 @@ module KonoUtils
     require 'will_paginate'
     require 'will_paginate-bootstrap'
     require 'rdiscount'
+    require 'underscore-rails'
 
 
     initializer 'kono_utils.append_views', :group => :all do |app|
