@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "patternfly-bootstrap-treeview": "^2.1.8"
+  }
+}

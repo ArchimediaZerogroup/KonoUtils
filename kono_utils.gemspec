@@ -29,14 +29,13 @@ Gem::Specification.new do |s|
   s.add_dependency 'formtastic-bootstrap', '~>3.1.1'
   s.add_dependency 'momentjs-rails', '>= 2.9.0'
   s.add_dependency 'bootstrap3-datetimepicker-rails', '~> 4.17.42'
-  s.add_dependency 'rails-assets-bootstrap-treeview', '~> 1.2.0'
   s.add_dependency 'will_paginate', '~> 3.1.0'
   s.add_dependency 'will_paginate-bootstrap'
   s.add_dependency 'rdiscount' #serve per stampare il markdown del changelog
-
+  s.add_dependency 'coffee-rails'
 
   s.add_development_dependency 'sqlite3'
-  s.add_development_dependency 'rails', '~> 4.2.4'
+  s.add_development_dependency 'rails', '> 4.2.4'
   s.add_development_dependency 'rspec-rails'
 
 end
