@@ -7,11 +7,18 @@ libreria di utilità per i vari progetti utilizzati da Archimedia.
 
 == Installazione
  aggiungere nel proprio gemfile
- source 'https://rails-assets.org'
 
  gem 'kono_utils'
 
- per avere anche le utilities in javascript:
+ bundle
+
+ Generatore:
+
+ bin/rails g kono_utils:install
+
+
+ che istalla le dipendenze con yarn e aggiunge il:
+
  require kono_utils/utilities
 
 == Controllers/Views
