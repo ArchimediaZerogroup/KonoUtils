@@ -1,9 +1,9 @@
 source 'https://rubygems.org'
 
 
-source 'https://rails-assets.org' do
-  gem 'rails-assets-bootstrap-treeview'
-end
+# source 'https://rails-assets.org' do
+#   gem 'rails-assets-bootstrap-treeview'
+# end
 
 # Declare your gem's dependencies in kono_utils.gemspec.
 # Bundler will treat runtime dependencies like base dependencies, and
@@ -18,3 +18,4 @@ gemspec
 # To use a debugger
 # gem 'byebug', group: [:development, :test]
 
+gem 'listen'
