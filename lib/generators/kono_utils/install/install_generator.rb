@@ -19,6 +19,13 @@ module KonoUtils
       copy_file 'initializer.rb', 'config/initializers/kono_utils.rb'
     end
 
+    def install_node_dependency
+      run "yarn add patternfly-bootstrap-treeview underscore"
+    end
+
+    def append_js_dependecy_to_assets
+      inject_into_file 'app/assets/javascripts/application.js',"//= require kono_utils/utilities\n", before: "//= require_tree ."
+    end
 
   end
 end
