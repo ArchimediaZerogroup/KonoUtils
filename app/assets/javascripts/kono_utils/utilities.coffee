@@ -1,10 +1,9 @@
-#= require underscore
+#= require underscore/underscore
 #= require EventEmitter
 #= require moment
 #= require bootstrap-datetimepicker
 #= require moment/it
-#= require bootstrap-treeview
-
+#= require patternfly-bootstrap-treeview/src/js/bootstrap-treeview.js
 
 @Kono = @Kono || {};
 
