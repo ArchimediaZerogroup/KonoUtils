@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    kono_utils (0.15.16)
+    kono_utils (1.0.0)
       actionview
       active_type
       bootstrap3-datetimepicker-rails (~> 4.17.42)
