@@ -8,6 +8,7 @@ module KonoUtils
     require 'will_paginate-bootstrap'
     require 'rdiscount'
     require 'underscore-rails'
+    require 'formtastic-bootstrap'
 
 
     initializer 'kono_utils.append_views', :group => :all do |app|
