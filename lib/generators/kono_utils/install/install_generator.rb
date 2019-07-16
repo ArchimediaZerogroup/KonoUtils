@@ -31,8 +31,17 @@ module KonoUtils
       inject_into_file 'app/helpers/application_helper.rb', "\ninclude KonoUtils::ApplicationHelper", after: "module ApplicationHelper"
     end
 
+    def install_active_record_traslation_on_application_record
+      inject_into_file 'app/models/application_record.rb', "\ninclude KonoUtils::Concerns::ActiveRecordTranslation\n", after: "ActiveRecord::Base"
+    rescue Exception => e
+      puts "Attenzione, includere a mano KonoUtils::Concerns::ActiveRecordTranslation
+            nel modello da cui darivano i modelli del base editing - #{e.message}"
+    end
+
     def append_gem_dependency
       append_to_file 'Gemfile', "# gem 'codice_fiscale'"
+    rescue Exception => e
+      puts e.message
     end
 
     def append_js_dependecy_to_assets
