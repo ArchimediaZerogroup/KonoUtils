@@ -33,8 +33,8 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'pundit', '~> 2.0'
   s.add_dependency 'kono_utils_helpers'
-  s.add_dependency 'cells-rails'
   s.add_dependency "trailblazer-cells",'~> 0.0.3'
+  s.add_dependency 'cells-rails'
   s.add_dependency "cells-erb"
 
   s.add_development_dependency 'sqlite3'
