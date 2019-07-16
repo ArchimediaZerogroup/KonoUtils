@@ -19,10 +19,6 @@ module KonoUtils
       copy_file 'initializer.rb', 'config/initializers/kono_utils.rb'
     end
 
-    def install_node_dependency
-      run "yarn add patternfly-bootstrap-treeview"
-    end
-
     def install_pundit
       run "rails g pundit:install"
     end
@@ -39,6 +35,7 @@ module KonoUtils
     end
 
     def append_gem_dependency
+      gem 'cells-erb' # inserita in installazione come specificato qua http://trailblazer.to/gems/cells/rails.html#engine-render-problems
       append_to_file 'Gemfile', "# gem 'codice_fiscale'"
     rescue Exception => e
       puts e.message
