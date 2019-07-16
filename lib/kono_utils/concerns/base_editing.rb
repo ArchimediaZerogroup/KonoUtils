@@ -5,9 +5,12 @@ module KonoUtils
     module BaseEditing
       extend ActiveSupport::Concern
 
+
       included do
 
         include Pundit
+        include KonoUtils::Concerns::SuccessMessage
+
         after_action :verify_authorized, except: :index
         after_action :verify_policy_scoped, only: :index
 
