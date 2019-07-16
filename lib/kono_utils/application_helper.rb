@@ -1,6 +1,9 @@
 module KonoUtils
   module ApplicationHelper
 
+    def self.included(base)
+      base.send :include, FontAwesome::Rails::IconHelper
+    end
 
     def will_paginate_bst(collection)
       will_paginate collection, renderer: BootstrapPagination::Rails
