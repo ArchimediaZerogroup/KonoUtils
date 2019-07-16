@@ -23,6 +23,10 @@ module KonoUtils
       run "yarn add patternfly-bootstrap-treeview"
     end
 
+    def append_gem_dependency
+      append_to_file 'Gemfile',"# gem 'codice_fiscale'"
+    end
+
     def append_js_dependecy_to_assets
       inject_into_file 'app/assets/javascripts/application.js',"//= require kono_utils/utilities\n", before: "//= require_tree ."
     end
