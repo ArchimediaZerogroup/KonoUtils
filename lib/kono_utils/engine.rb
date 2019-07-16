@@ -8,7 +8,7 @@ module KonoUtils
     require 'will_paginate-bootstrap'
     require 'rdiscount'
     require 'underscore-rails'
-    require 'formtastic-bootstrap'
+
     require 'pundit'
 
 

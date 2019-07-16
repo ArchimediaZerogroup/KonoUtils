@@ -13,7 +13,6 @@ PATH
       actionview
       coffee-rails
       font-awesome-rails
-      formtastic-bootstrap (~> 3.1.1)
       kono_utils_helpers
       momentjs-rails (>= 2.9.0)
       pundit (~> 2.0)
@@ -87,10 +86,6 @@ GEM
     ffi (1.11.1)
     font-awesome-rails (4.7.0.5)
       railties (>= 3.2, < 6.1)
-    formtastic (3.1.5)
-      actionpack (>= 3.2.13)
-    formtastic-bootstrap (3.1.1)
-      formtastic (>= 3.0)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
     i18n (1.5.1)
