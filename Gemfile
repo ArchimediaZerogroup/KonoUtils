@@ -18,13 +18,9 @@ gemspec
 # To use a debugger
 # gem 'byebug', group: [:development, :test]
 
-gem 'listen'
 
 gem 'kono_utils_helpers', path: '../kono_utils_helpers'
 
 ##
 # Per testare le varie modalità di visualizzazione includiamo qua dentro le gemme
 # le abilitiamo da testare man mano.
-
-
-gem 'kono_utils_boostrap_view3', path: "../KonoUtilsBoostrapView3"

@@ -1,7 +1,7 @@
 module KonoUtils
   class Engine < ::Rails::Engine
 
-    require 'bootstrap3-datetimepicker-rails'
+    # require 'bootstrap3-datetimepicker-rails'
     require 'momentjs-rails'
     require 'font-awesome-rails'
     require 'will_paginate'
