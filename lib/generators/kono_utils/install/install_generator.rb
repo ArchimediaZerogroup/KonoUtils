@@ -45,7 +45,7 @@ module KonoUtils
     end
 
     def append_js_dependecy_to_assets
-      inject_into_file 'app/assets/javascripts/application.js', "//= require kono_utils/utilities\n", before: "//= require_tree ."
+      inject_into_file 'app/assets/javascripts/application.js', "//= require jquery/dist/jquery\n//= require kono_utils/utilities\n", before: "//= require_tree ."
     end
 
 
