@@ -11,3 +11,4 @@ spec/dummy/.sass-cache
 *.gem
 
 spec/dummy/yarn-error\.log
+vendor/bundle
