@@ -1,15 +1,28 @@
 PATH
+  remote: ../KonoUtilsBoostrapView3
+  specs:
+    kono_utils_boostrap_view3 (0.1.0)
+      kono_utils
+      rails (~> 5.2.3)
+
+PATH
+  remote: ../kono_utils_helpers
+  specs:
+    kono_utils_helpers (0.1.0)
+
+PATH
   remote: .
   specs:
     kono_utils (1.0.1)
       actionview
       active_type
       bootstrap3-datetimepicker-rails (~> 4.17.42)
-      codice-fiscale
       coffee-rails
       font-awesome-rails
       formtastic-bootstrap (~> 3.1.1)
+      kono_utils_helpers
       momentjs-rails (>= 2.9.0)
+      pundit (~> 2.0)
       rails-jquery-autocomplete (~> 1.0.3)
       rdiscount
       underscore-rails
@@ -42,7 +55,7 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.0.3)
-    active_type (1.1.1)
+    active_type (1.2.1)
       activerecord (>= 3.2)
     activejob (5.2.3)
       activesupport (= 5.2.3)
@@ -66,9 +79,6 @@ GEM
     bootstrap3-datetimepicker-rails (4.17.47)
       momentjs-rails (>= 2.8.1)
     builder (3.2.3)
-    codice-fiscale (0.0.9)
-      activemodel
-      activesupport
     coffee-rails (5.0.0)
       coffee-script (>= 2.2.0)
       railties (>= 5.2.0)
@@ -113,6 +123,8 @@ GEM
     nio4r (2.3.1)
     nokogiri (1.9.1)
       mini_portile2 (~> 2.4.0)
+    pundit (2.0.1)
+      activesupport (>= 3.0.0)
     rack (2.0.7)
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
@@ -190,6 +202,8 @@ PLATFORMS
 
 DEPENDENCIES
   kono_utils!
+  kono_utils_boostrap_view3!
+  kono_utils_helpers!
   listen
   rails (> 4.2.4)
   rspec-rails

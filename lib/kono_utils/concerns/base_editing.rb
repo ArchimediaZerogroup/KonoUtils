@@ -7,6 +7,10 @@ module KonoUtils
 
       included do
 
+        include Pundit
+        after_action :verify_authorized, except: :index
+        after_action :verify_policy_scoped, only: :index
+
         before_action :append_view_paths
 
         before_action :load_object, except: [:index, :new, :create]

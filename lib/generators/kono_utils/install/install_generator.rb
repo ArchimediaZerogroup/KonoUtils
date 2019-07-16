@@ -23,13 +23,22 @@ module KonoUtils
       run "yarn add patternfly-bootstrap-treeview"
     end
 
+    def install_pundit
+      run "rails g pundit:install"
+    end
+
+    def install_helper_on_application_helper
+      inject_into_file 'app/helpers/application_helper.rb', "\ninclude KonoUtils::ApplicationHelper", after: "module ApplicationHelper"
+    end
+
     def append_gem_dependency
-      append_to_file 'Gemfile',"# gem 'codice_fiscale'"
+      append_to_file 'Gemfile', "# gem 'codice_fiscale'"
     end
 
     def append_js_dependecy_to_assets
-      inject_into_file 'app/assets/javascripts/application.js',"//= require kono_utils/utilities\n", before: "//= require_tree ."
+      inject_into_file 'app/assets/javascripts/application.js', "//= require kono_utils/utilities\n", before: "//= require_tree ."
     end
+
 
   end
 end

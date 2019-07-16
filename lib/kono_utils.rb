@@ -3,12 +3,14 @@ require 'kono_utils/engine' if defined?(::Rails)
 module KonoUtils
   extend ActiveSupport::Autoload
 
+  # Classi helpers provenienti dalla gemma KonoUtilsHelper
   autoload :VirtualModel
   autoload :Encoder
   autoload :ParamsHashArray
   autoload :Percentage
   autoload :FiscalCode
   autoload :TmpFile
+
   autoload :ApplicationHelper
   autoload :BaseEditingHelper
   autoload :BaseSearch

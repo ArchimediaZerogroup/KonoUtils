@@ -9,6 +9,7 @@ module KonoUtils
     require 'rdiscount'
     require 'underscore-rails'
     require 'formtastic-bootstrap'
+    require 'pundit'
 
 
     initializer 'kono_utils.append_views', :group => :all do |app|

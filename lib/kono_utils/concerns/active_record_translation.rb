@@ -45,3 +45,10 @@ module KonoUtils::Concerns
 
   end
 end
+
+if defined?(::ApplicationRecord)
+  ::ApplicationRecord.include KonoUtils::Concerns::ActiveRecordTranslation
+else
+  # per i vecchi rails
+  ActiveRecord::Base.include KonoUtils::Concerns::ActiveRecordTranslation
+end
