@@ -9,13 +9,13 @@ PATH
   remote: ../kono_utils_helpers
   specs:
     kono_utils_helpers (0.1.0)
+      active_type
 
 PATH
   remote: .
   specs:
     kono_utils (1.0.1)
       actionview
-      active_type
       bootstrap3-datetimepicker-rails (~> 4.17.42)
       coffee-rails
       font-awesome-rails

@@ -23,7 +23,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'actionview'
   s.add_dependency 'font-awesome-rails'
   s.add_dependency 'underscore-rails'
-  s.add_dependency 'active_type'
   s.add_dependency 'rails-jquery-autocomplete', '~>1.0.3'
   s.add_dependency 'formtastic-bootstrap', '~>3.1.1'
   s.add_dependency 'momentjs-rails', '>= 2.9.0'
