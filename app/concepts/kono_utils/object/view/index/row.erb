@@ -1,0 +1,12 @@
+<tr>
+  <% table_columns.each do |t| %>
+    <%= index_column_builder(t, :td, record: model) do %>
+      <%= index_print_column(model, t) %>
+    <% end %>
+  <% end %>
+  <th class="index-col-btn">
+    <%#= render 'index_buttons', record: model %>
+    <%= concept("kono_utils/object/cell/index/row_buttons", model) %>
+
+  </th>
+</tr>

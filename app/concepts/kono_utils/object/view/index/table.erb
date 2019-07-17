@@ -1,0 +1,17 @@
+<table class="table table-bordered table-hover">
+  <thead>
+  <tr>
+    <% table_columns.each do |t| %>
+      <%= index_column_builder(t, :th) do %>
+        <%= index_print_column_head(t) %>
+      <% end %>
+    <% end %>
+    <th class="index-col-btn"></th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <%= concept("kono_utils/object/cell/index/row", collection: model) %>
+  </tbody>
+  <%= render '_index_tfoot.html' %>
+</table>
