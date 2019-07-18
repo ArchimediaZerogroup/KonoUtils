@@ -1,5 +1,5 @@
-#= require underscore
-#= require wolfy87-eventemitter/EventEmitter.js
+#= require underscore/underscore
+#= require wolfy87-eventemitter/EventEmitter
 
 @Kono = @Kono || {};
 

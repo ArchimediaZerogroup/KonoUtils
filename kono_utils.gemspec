@@ -21,8 +21,6 @@ Gem::Specification.new do |s|
   s.test_files = files.grep(%r{^(spec)/})
 
   s.add_dependency 'actionview'
-  s.add_dependency 'underscore-rails'
-  s.add_dependency 'rails-jquery-autocomplete', '~>1.0.3'
   s.add_dependency 'will_paginate', '~> 3.1.0'
   s.add_dependency 'rdiscount' #serve per stampare il markdown del changelog
   s.add_dependency 'coffee-rails'

@@ -1,12 +1,8 @@
 module KonoUtils
   class Engine < ::Rails::Engine
 
-    # require 'bootstrap3-datetimepicker-rails'
-    require 'font-awesome-rails'
     require 'will_paginate'
-    require 'will_paginate-bootstrap'
     require 'rdiscount'
-    require 'underscore-rails'
 
     require 'pundit'
     # require 'trailblazer/cells'

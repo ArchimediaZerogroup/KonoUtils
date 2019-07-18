@@ -14,10 +14,8 @@ PATH
       coffee-rails
       kono_utils_helpers
       pundit (~> 2.0)
-      rails-jquery-autocomplete (~> 1.0.3)
       rdiscount
       sass-rails
-      underscore-rails
       will_paginate (~> 3.1.0)
 
 GEM
@@ -123,8 +121,6 @@ GEM
       nokogiri (>= 1.6)
     rails-html-sanitizer (1.0.4)
       loofah (~> 2.2, >= 2.2.2)
-    rails-jquery-autocomplete (1.0.5)
-      rails (>= 3.2)
     railties (5.2.3)
       actionpack (= 5.2.3)
       activesupport (= 5.2.3)
@@ -177,7 +173,6 @@ GEM
     tilt (2.0.9)
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
-    underscore-rails (1.8.3)
     websocket-driver (0.7.0)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.3)
