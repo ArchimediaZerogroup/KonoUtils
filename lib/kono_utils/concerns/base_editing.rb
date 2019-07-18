@@ -14,8 +14,6 @@ module KonoUtils
         after_action :verify_authorized, except: :index
         after_action :verify_policy_scoped, only: :index
 
-        before_action :append_view_paths
-
         before_action :load_object, except: [:index, :new, :create]
         helper_method :base_class
         helper_method :form_attributes
@@ -159,14 +157,6 @@ module KonoUtils
             logger.debug {"Invalid Obj:"}
             logger.debug {@object.errors.inspect}
           end
-        end
-
-        ##
-        # Aggiungo una path alla vista del base editing controller,
-        # nel caso non siamo derivati dal controller ma ho solamente incluso il concern
-        def append_view_paths
-          append_view_path KonoUtils::Engine.root.join("app", "views", "kono_utils")
-          append_view_path KonoUtils::Engine.root.join("app", "views", "kono_utils", "base_editing")
         end
 
 
