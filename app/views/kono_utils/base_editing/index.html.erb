@@ -1,9 +1,0 @@
-<%= render 'index_page_title_header' %>
-<%= render 'index_page_side_title_header' %>
-
-<%= render 'search_form' unless @search.nil? %>
-
-<%= concept("kono_utils/object/cell/index/table", @objects,context: { current_user: current_user }) %>
-
-<%= will_paginate_bst(@objects) %>
-
