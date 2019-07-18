@@ -12,12 +12,21 @@ module KonoUtils
   autoload :TmpFile
 
   autoload :ApplicationHelper
+  autoload :ApplicationCoreHelper
   autoload :BaseEditingHelper
+  autoload :BaseEditingCoreHelper
   autoload :BaseSearch
   autoload :Concerns
 
   class Configuration
     attr_accessor :google_api_key
+    attr_accessor :application_helper_includes
+    attr_accessor :base_editing_helper_includes
+
+    def initialize
+      @application_helper_includes = []
+      @base_editing_helper_includes = []
+    end
   end
 
   class << self
