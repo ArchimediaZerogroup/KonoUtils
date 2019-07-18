@@ -5,9 +5,7 @@ module KonoUtils
     require 'rdiscount'
 
     require 'pundit'
-    # require 'trailblazer/cells'
-    # require 'cell/erb'
-    # require 'cell/rails'
+
 
 
     initializer 'kono_utils.append_views', :group => :all do |app|

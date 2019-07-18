@@ -35,8 +35,6 @@ module KonoUtils
     end
 
     def append_gem_dependency
-      gem 'cells-erb' # inserita in installazione come specificato qua http://trailblazer.to/gems/cells/rails.html#engine-render-problems
-      gem 'cells-rails'
       append_to_file 'Gemfile', "# gem 'codice_fiscale'"
     rescue Exception => e
       puts e.message
