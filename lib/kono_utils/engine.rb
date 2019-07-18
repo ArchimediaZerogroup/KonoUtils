@@ -2,7 +2,6 @@ module KonoUtils
   class Engine < ::Rails::Engine
 
     # require 'bootstrap3-datetimepicker-rails'
-    require 'momentjs-rails'
     require 'font-awesome-rails'
     require 'will_paginate'
     require 'will_paginate-bootstrap'
@@ -10,9 +9,9 @@ module KonoUtils
     require 'underscore-rails'
 
     require 'pundit'
-    require 'trailblazer/cells'
-    require 'cell/erb'
-    require 'cell/rails'
+    # require 'trailblazer/cells'
+    # require 'cell/erb'
+    # require 'cell/rails'
 
 
     initializer 'kono_utils.append_views', :group => :all do |app|

@@ -1,9 +1,5 @@
 #= require underscore
-#= require EventEmitter
-#= require moment
-#= require bootstrap-datetimepicker
-#= require moment/it
-#= require patternfly-bootstrap-treeview/src/js/bootstrap-treeview.js
+#= require wolfy87-eventemitter/EventEmitter.js
 
 @Kono = @Kono || {};
 
@@ -60,20 +56,20 @@
   Singleton per avere una modal da utilizzare
    funziona attraverso helper bootstrap_please_wait
 ###
-@Kn.show_wait = ->
-  $('#processing_wait').modal()
-
-@Kn.hide_wait = ->
-  $('#processing_wait').modal('hide')
-  #forzo eliminazione di tutti i fade
-  $('.modal-backdrop.fade.in').remove()
+#@Kn.show_wait = ->
+#  $('#processing_wait').modal()
+#
+#@Kn.hide_wait = ->
+#  $('#processing_wait').modal('hide')
+#  #forzo eliminazione di tutti i fade
+#  $('.modal-backdrop.fade.in').remove()
 
 
 ##
 # A tutte le form aggiungo l'autocomplete ad off
-$ ->
-  $('form').prop('autocomplete', 'off')
-
+#$ ->
+#  $('form').prop('autocomplete', 'off')
+#
 
 ##
 # picker = new Kn.utilities.DateTimePicker(
@@ -82,125 +78,126 @@ $ ->
 #  )
 #  picker.initialize()
 #
-class DateTimePicker
-
-  defaults = server_format: "YYYY-MM-DD HH:mm:ss Z",
-  format: 'DD/MM/YYYY',
-  server_match: /^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2} .$/,
-  locale: 'it'
-
-  constructor: (options = {}) ->
-    {@selector, @server_format, @format, @server_match, @locale} = _.extend defaults, options
-    @input_date = @parse_input_value()
-
-  initialize: ->
-    if @input_date
-      val = @input_date
-      val = @input_date.format(@format) if _.isFunction(@input_date.format)
-      $(@selector).find("input").val(val)
-
-    $(@selector).datetimepicker(@picker_configs())
-
-  picker_configs: ->
-    {
-      format: @format,
-      locale: @locale
-    }
-
-  parse_input_value: ->
-    value = $(@selector).find("input").attr('value')
-    unless value == '' or _.isUndefined(value)
-      if @server_match.test(value)
-        return moment(value, @server_format)
-      else
-        return value
-    false
+#class DateTimePicker
+#
+#  defaults = server_format: "YYYY-MM-DD HH:mm:ss Z",
+#  format: 'DD/MM/YYYY',
+#  server_match: /^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2} .$/,
+#  locale: 'it'
+#
+#  constructor: (options = {}) ->
+#    {@selector, @server_format, @format, @server_match, @locale} = _.extend defaults, options
+#    @input_date = @parse_input_value()
+#
+#  initialize: ->
+#    if @input_date
+#      val = @input_date
+#      val = @input_date.format(@format) if _.isFunction(@input_date.format)
+#      $(@selector).find("input").val(val)
+#
+#    $(@selector).datetimepicker(@picker_configs())
+#
+#  picker_configs: ->
+#    {
+#      format: @format,
+#      locale: @locale
+#    }
+#
+#  parse_input_value: ->
+#    value = $(@selector).find("input").attr('value')
+#    unless value == '' or _.isUndefined(value)
+#      if @server_match.test(value)
+#        return moment(value, @server_format)
+#      else
+#        return value
+#    false
 
 
 ##
 # Definisce l'elemento associato alla data finale di un range di date
-  set_end: (@end_pick)->
-    $(@selector).data("DateTimePicker").maxDate(@end_pick.input_date) if @end_pick.input_date
-
-    $("#{@end_pick.selector}").on "dp.change", (e) =>
-      $(@selector).data("DateTimePicker").maxDate(e.date)
-
-##
-# Definisce l'elemento associato alla data iniziale di un range di date
-  set_start: (@start_pick)->
-    $(@selector).data("DateTimePicker").minDate(@start_pick.input_date) if @start_pick.input_date
-
-    $("#{@start_pick.selector}").on "dp.change", (e) =>
-      $(@selector).data("DateTimePicker").minDate(e.date)
-
-
-@Kn.ns 'Kn.utilities', (exports)->
-  exports.DateTimePicker = DateTimePicker
-
-class TimePicker extends DateTimePicker
-  defaults = server_format: "HH:mm",
-  format: 'HH:mm',
-  server_match: /[0-9]{2}:[0-9]{2} .$/
-
-  picker_configs: ->
-    _.extend super(), {format: 'HH:mm'}
+#  set_end: (@end_pick)->
+#    $(@selector).data("DateTimePicker").maxDate(@end_pick.input_date) if @end_pick.input_date
+#
+#    $("#{@end_pick.selector}").on "dp.change", (e) =>
+#      $(@selector).data("DateTimePicker").maxDate(e.date)
+#
+## Definisce l'elemento associato alla data iniziale di un range di date
+#  set_start: (@start_pick)->
+#    $(@selector).data("DateTimePicker").minDate(@start_pick.input_date) if @start_pick.input_date
+#
+#    $("#{@start_pick.selector}").on "dp.change", (e) =>
+#      $(@selector).data("DateTimePicker").minDate(e.date)
 
 
-@Kn.ns 'Kn.utilities', (exports)->
-  exports.TimePicker = TimePicker
+
+
+#@Kn.ns 'Kn.utilities', (exports)->
+#  exports.DateTimePicker = DateTimePicker
+
+#class TimePicker extends DateTimePicker
+#  defaults = server_format: "HH:mm",
+#  format: 'HH:mm',
+#  server_match: /[0-9]{2}:[0-9]{2} .$/
+#
+#  picker_configs: ->
+#    _.extend super(), {format: 'HH:mm'}
+#
+#
+#@Kn.ns 'Kn.utilities', (exports)->
+#  exports.TimePicker = TimePicker
 
 
 ##
 # Eventi generali Jquery
-$ ->
-  $('.collapse_search').click (e) ->
-    e.preventDefault();
-    $('.search_panel .collapsible_panel').slideToggle()
-  $('.search_panel .collapsible_panel').slideUp() unless $('.search_panel .collapsible_panel.uncollapsed').length > 0
-
+#$ ->
+#  $('.collapse_search').click (e) ->
+#    e.preventDefault();
+#    $('.search_panel .collapsible_panel').slideToggle()
+#  $('.search_panel .collapsible_panel').slideUp() unless $('.search_panel .collapsible_panel.uncollapsed').length > 0
+#
 
 ## Trasformare form bootstrap da label posizionate sopra a input a sinistra
 # Default:
 # label_cls: 'col-sm-2'
 # wrapp_cls: 'col-sm-10'
-$.fn.extend
-  bs3_form_inline: (options)->
-    settings =
-      label_cls: 'col-sm-2'
-      wrapp_cls: 'col-sm-10'
+#$.fn.extend
+#  bs3_form_inline: (options)->
+#    settings =
+#      label_cls: 'col-sm-2'
+#      wrapp_cls: 'col-sm-10'
+#
+#    settings = $.extend settings, options
+#    return @each () ->
+#      $(this).find('.form-group .form-label').addClass settings.label_cls
+#      $(this).find('.form-group .form-wrapper').addClass settings.wrapp_cls
 
-    settings = $.extend settings, options
-    return @each () ->
-      $(this).find('.form-group .form-label').addClass settings.label_cls
-      $(this).find('.form-group .form-wrapper').addClass settings.wrapp_cls
 
+#duplicate_button_toggle = (btn)->
+#  if $(btn.parentNode).find('.remove_row,.add_one_more').length == 1
+#    if $(btn.parentNode).find('.remove_row').length == 0
+#      rem_class = 'add_one_more'
+#      add_class = 'remove_row'
+#      ico_rem_class = 'fa-plus'
+#      ico_add_class = 'fa-minus'
+#    if $(btn.parentNode).find('.add_one_more').length == 0
+#      rem_class = 'remove_row'
+#      add_class = 'add_one_more'
+#      ico_rem_class = 'fa-minus'
+#      ico_add_class = 'fa-plus'
+#
+#    $(btn).clone().appendTo(btn.parentNode).
+#    removeClass(rem_class).
+#    addClass(add_class).
+#    find('.fa').
+#    removeClass(ico_rem_class).
+#    addClass(ico_add_class)
 
-duplicate_button_toggle = (btn)->
-  if $(btn.parentNode).find('.remove_row,.add_one_more').length == 1
-    if $(btn.parentNode).find('.remove_row').length == 0
-      rem_class = 'add_one_more'
-      add_class = 'remove_row'
-      ico_rem_class = 'fa-plus'
-      ico_add_class = 'fa-minus'
-    if $(btn.parentNode).find('.add_one_more').length == 0
-      rem_class = 'remove_row'
-      add_class = 'add_one_more'
-      ico_rem_class = 'fa-minus'
-      ico_add_class = 'fa-plus'
-
-    $(btn).clone().appendTo(btn.parentNode).
-    removeClass(rem_class).
-    addClass(add_class).
-    find('.fa').
-    removeClass(ico_rem_class).
-    addClass(ico_add_class)
-
-elaborate_buttons = (tabella)->
-#  numero_elementi = $(tabella).find('.add_one_more').length
-  $(tabella).find('.add_one_more').each (index, ele)->
-    duplicate_button_toggle(ele)
-  if $(tabella).find('tr:not(.multiple_table_remove_row) .remove_row').length == 1
-    $(tabella).find('tr:not(.multiple_table_remove_row) .remove_row').first().remove()
+#elaborate_buttons = (tabella)->
+##  numero_elementi = $(tabella).find('.add_one_more').length
+#  $(tabella).find('.add_one_more').each (index, ele)->
+#    duplicate_button_toggle(ele)
+#  if $(tabella).find('tr:not(.multiple_table_remove_row) .remove_row').length == 1
+#    $(tabella).find('tr:not(.multiple_table_remove_row) .remove_row').first().remove()
 
 
 ## Gestione elementi multipli

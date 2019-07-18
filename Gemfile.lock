@@ -12,16 +12,13 @@ PATH
     kono_utils (1.0.1)
       actionview
       coffee-rails
-      font-awesome-rails
       kono_utils_helpers
-      momentjs-rails (>= 2.9.0)
       pundit (~> 2.0)
       rails-jquery-autocomplete (~> 1.0.3)
       rdiscount
       sass-rails
       underscore-rails
       will_paginate (~> 3.1.0)
-      will_paginate-bootstrap
 
 GEM
   remote: https://rubygems.org/
@@ -84,8 +81,6 @@ GEM
     erubi (1.8.0)
     execjs (2.7.0)
     ffi (1.11.1)
-    font-awesome-rails (4.7.0.5)
-      railties (>= 3.2, < 6.1)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
     i18n (1.5.1)
@@ -102,8 +97,6 @@ GEM
     mini_mime (1.0.1)
     mini_portile2 (2.4.0)
     minitest (5.11.3)
-    momentjs-rails (2.20.1)
-      railties (>= 3.1)
     nio4r (2.3.1)
     nokogiri (1.9.1)
       mini_portile2 (~> 2.4.0)
@@ -189,8 +182,6 @@ GEM
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.3)
     will_paginate (3.1.7)
-    will_paginate-bootstrap (1.0.2)
-      will_paginate (>= 3.0.3)
 
 PLATFORMS
   ruby
