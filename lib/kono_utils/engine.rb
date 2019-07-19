@@ -1,7 +1,6 @@
 module KonoUtils
   class Engine < ::Rails::Engine
 
-    require 'will_paginate'
     require 'rdiscount'
 
     require 'pundit'

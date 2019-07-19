@@ -40,9 +40,7 @@ module KonoUtils
       puts e.message
     end
 
-    # def append_js_dependecy_to_assets
-    #   inject_into_file 'app/assets/javascripts/application.js', "//= require jquery/dist/jquery\n//= require kono_utils/utilities\n", before: "//= require_tree ."
-    # end
+
 
     def install_node_dependency
       pacchetti_yarn = ["wolfy87-eventemitter","underscore"]

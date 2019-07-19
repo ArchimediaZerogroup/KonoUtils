@@ -32,7 +32,7 @@ module KonoUtils
         def index(respond_to_call: nil)
           @objects = policy_scope(base_scope).all
           @objects = yield(@objects) if block_given?
-          @objects = @objects.paginate(:page => params[:page])
+          @objects = KonoUtils.configuration.pagination_proxer.new(@objects).paginate(params)
 
           respond_to do |format|
             format.html # index.html.erb

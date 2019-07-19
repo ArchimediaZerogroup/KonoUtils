@@ -16,7 +16,6 @@ PATH
       pundit (~> 2.0)
       rdiscount
       sass-rails
-      will_paginate (~> 3.1.0)
 
 GEM
   remote: https://rubygems.org/
@@ -149,7 +148,7 @@ GEM
       rspec-mocks (~> 3.7.0)
       rspec-support (~> 3.7.0)
     rspec-support (3.7.0)
-    sass (3.5.5)
+    sass (3.7.4)
       sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
       rb-fsevent (~> 0.9, >= 0.9.4)
@@ -176,7 +175,6 @@ GEM
     websocket-driver (0.7.0)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.3)
-    will_paginate (3.1.7)
 
 PLATFORMS
   ruby
@@ -189,4 +187,4 @@ DEPENDENCIES
   sqlite3
 
 BUNDLED WITH
-   1.16.1
+   1.17.3

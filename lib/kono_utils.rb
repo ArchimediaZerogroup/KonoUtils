@@ -11,6 +11,9 @@ module KonoUtils
   autoload :FiscalCode
   autoload :TmpFile
 
+  # Classi interne
+  autoload :PaginateProxer
+
   autoload :ApplicationHelper
   autoload :ApplicationCoreHelper
   autoload :BaseEditingHelper
@@ -22,10 +25,12 @@ module KonoUtils
     attr_accessor :google_api_key
     attr_accessor :application_helper_includes
     attr_accessor :base_editing_helper_includes
+    attr_accessor :pagination_proxer
 
     def initialize
       @application_helper_includes = []
       @base_editing_helper_includes = []
+      @pagination_proxer = KonoUtils::PaginateProxer
     end
   end
 
@@ -33,6 +38,7 @@ module KonoUtils
     attr_writer :configuration
   end
 
+  # @return [Configuration]
   def self.configuration
     @configuration ||= Configuration.new
   end
