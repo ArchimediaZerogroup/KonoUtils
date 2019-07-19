@@ -110,22 +110,18 @@ module KonoUtils
         ##
         # Elenco degli attributi da visualizzare nella form
         def form_attributes(model = base_class.new)
+          ActiveSupport::Deprecation.warn('Utilizzato solo nel vecchio sistema')
           policy(model).permitted_attributes
         end
 
         ##
         # Elenco ordinato dei campi da utilizzare nella visualizzazione della tabella index
         def table_columns
+          ActiveSupport::Deprecation.warn('Utilizzato solo nel vecchio sistema')
           policy(base_class.new).permitted_attributes
         end
 
-        private
-        def load_object
-          @object = base_class.find(params[:id])
-          authorize @object
-          logger.debug {"Oggetto #{@object.inspect}"}
-
-        end
+        protected
 
         def base_class
           controller = controller_name
@@ -136,6 +132,16 @@ module KonoUtils
 
           modello
         end
+
+        private
+        def load_object
+          @object = base_class.find(params[:id])
+          authorize @object
+          logger.debug {"Oggetto #{@object.inspect}"}
+
+        end
+
+
 
         ##
         # Scope iniziale per index, sovrascrivibile per poter inizializzare ricerca,

@@ -139,21 +139,7 @@ module KonoUtils
     end
 
 
-    def title_mod(model)
-      "#{t(:edit)} #{model.mn}"
-    end
 
-    def title_new(model)
-      "#{t(:new)} #{model.mn}"
-    end
-
-    def title_newa(model)
-      "#{t(:newa)} #{model.mn}"
-    end
-
-    def title_del(model)
-      "#{t(:del)} #{model.mn}"
-    end
 
 
     ##

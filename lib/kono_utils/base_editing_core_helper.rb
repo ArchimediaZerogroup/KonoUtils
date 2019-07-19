@@ -12,21 +12,21 @@ module KonoUtils
     # Serie di metodi che identificano i titoli generati automaticamente
     # Viene utilizzato i18n per identificare se un determinato modello è di tipo F o M
     # é presente quindi una chiave in YML che identifica ogni modello(default M)
-    def title_mod_g(model)
-      "#{t("edit_title_#{model_gender(model)}", default: 'Modifica')} #{model.mn}"
-    end
-
-    def title_new_g(model)
-      "#{t("new_title_#{model_gender(model)}", default: 'Nuovo')} #{model.mn}"
-    end
-
-    def title_del_g(model)
-      "#{t("del_title_#{model_gender(model)}", default: 'Cancella')} #{model.mn}"
-    end
-
-    def model_gender(model)
-      t("activerecord.modelgender.#{model.name.underscore.to_sym}", :default => :m).to_sym
-    end
+    # def title_mod_g(model)
+    #   "#{t("edit_title_#{model_gender(model)}", default: 'Modifica')} #{model.mn}"
+    # end
+    #
+    # def title_new_g(model)
+    #   "#{t("new_title_#{model_gender(model)}", default: 'Nuovo')} #{model.mn}"
+    # end
+    #
+    # def title_del_g(model)
+    #   "#{t("del_title_#{model_gender(model)}", default: 'Cancella')} #{model.mn}"
+    # end
+    #
+    # def model_gender(model)
+    #   t("activerecord.modelgender.#{model.name.underscore.to_sym}", :default => :m).to_sym
+    # end
 
     # def new_button(path, base_class=nil)
     #   options = {class: 'btn btn-success btn-xs'}
@@ -170,9 +170,9 @@ module KonoUtils
     # end
 
 
-    def semantic_form_attributes(obj)
-      obj
-    end
+    # def semantic_form_attributes(obj)
+    #   obj
+    # end
 
 
     ##
