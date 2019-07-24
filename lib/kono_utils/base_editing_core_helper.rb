@@ -1,12 +1,12 @@
 module KonoUtils
   module BaseEditingCoreHelper
 
-    def self.included(mod)
-      if ::Rails.application.config.action_controller.include_all_helpers!=false
-        raise "Devi definire in config/application.rb config.action_controller.include_all_helpers=false
-                in modo da far funzionare correttamente l'override degli helper come per i controller"
-      end
-    end
+    # def self.included(mod)
+    #   if ::Rails.application.config.action_controller.include_all_helpers!=false
+    #     raise "Devi definire in config/application.rb config.action_controller.include_all_helpers=false
+    #             in modo da far funzionare correttamente l'override degli helper come per i controller"
+    #   end
+    # end
 
     ##
     # Serie di metodi che identificano i titoli generati automaticamente
@@ -51,15 +51,15 @@ module KonoUtils
 
     ##
     # Questa funzione serve per essere sovrascritta nell'helper specializzato del controller
-    def index_print_column(record, field)
-      record.send(field)
-    end
+    # def index_print_column(record, field)
+    #   record.send(field)
+    # end
 
     ##
     # Questa funzione serve per stampare il contenuto dell'header
-    def index_print_column_head(field)
-      block_given? ? yield(field) : base_class.han(field)
-    end
+    # def index_print_column_head(field)
+    #   block_given? ? yield(field) : base_class.han(field)
+    # end
 
     ##
     # Questa funzione serve per generare la colonna della tabella
@@ -68,16 +68,16 @@ module KonoUtils
     #   - colonna
     #   - tipo di colonna td|th
     #   - opzionali     : hash{record} per fare altro
-    def index_column_builder(field, column, record: nil)
-      column_class = "column_#{field}"
-      column_id=''
-      if record
-        column_id = "#{column_class}-#{dom_id(record)}"
-      end
-      content_tag column, class: column_class, id: column_id do
-        yield column_class, column_id
-      end
-    end
+    # def index_column_builder(field, column, record: nil)
+    #   column_class = "column_#{field}"
+    #   column_id=''
+    #   if record
+    #     column_id = "#{column_class}-#{dom_id(record)}"
+    #   end
+    #   content_tag column, class: column_class, id: column_id do
+    #     yield column_class, column_id
+    #   end
+    # end
 
     # def list_button(path)
     #   link_to fa_icon("list fw"), path, class: 'btn btn-default btn-xs'
@@ -88,25 +88,25 @@ module KonoUtils
     # e quindi stampare un determinato campo in modo differente
     # si occupa anche di gestire i campi provenienti dalla policy nel caso siano a più livelli con i nested
     # prendiamo in considerazione la situazione con has_many :campo=>[] o con :campo=>[:ciao,:pippo,:pluto]
-    def editing_form_print_field(form, field)
-      if field.is_a?(Hash)
-        #devo nestarlo
-        bf = ActiveSupport::SafeBuffer.new
-
-        field.each do |k, v|
-          if v.length==0
-            #caso in cui è un elemento normale, ma che ha una selezione multipla
-            bf<< editing_form_print_field(form, k)
-          else
-            #caso in cui potremmo essere in un campo di multipli elementi con vari valori ognuno
-            bf<< nest_editing_form_print_field(form, k, v)
-          end
-        end
-        bf
-      else
-        form.input field
-      end
-    end
+    # def editing_form_print_field(form, field)
+    #   if field.is_a?(Hash)
+    #     #devo nestarlo
+    #     bf = ActiveSupport::SafeBuffer.new
+    #
+    #     field.each do |k, v|
+    #       if v.length==0
+    #         #caso in cui è un elemento normale, ma che ha una selezione multipla
+    #         bf<< editing_form_print_field(form, k)
+    #       else
+    #         #caso in cui potremmo essere in un campo di multipli elementi con vari valori ognuno
+    #         bf<< nest_editing_form_print_field(form, k, v)
+    #       end
+    #     end
+    #     bf
+    #   else
+    #     form.input field
+    #   end
+    # end
 
     ##
     # Questa funzione può essere sovrascritta per gestire in modo personale la renderizzazine dei nested attributes
@@ -114,17 +114,17 @@ module KonoUtils
     #   - form              -> form di formtastic
     #   - contenitore       -> campo principale
     #   - campi             -> i campi interni
-    def nest_editing_form_print_field(form, contenitore, campi)
-      form.semantic_fields_for contenitore do |item|
-        item.inputs :name => t(".#{form.object.mn}.#{contenitore}", :default => contenitore.to_s.camelcase) do
-          bf = ActiveSupport::SafeBuffer.new
-          campi.each do |c|
-            bf<<editing_form_print_field(item, c)
-          end
-          bf
-        end
-      end
-    end
+    # def nest_editing_form_print_field(form, contenitore, campi)
+    #   form.semantic_fields_for contenitore do |item|
+    #     item.inputs :name => t(".#{form.object.mn}.#{contenitore}", :default => contenitore.to_s.camelcase) do
+    #       bf = ActiveSupport::SafeBuffer.new
+    #       campi.each do |c|
+    #         bf<<editing_form_print_field(item, c)
+    #       end
+    #       bf
+    #     end
+    #   end
+    # end
 
     ##
     # Per divisione in celle della form
