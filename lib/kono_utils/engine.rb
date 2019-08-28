@@ -6,7 +6,6 @@ module KonoUtils
     require 'pundit'
 
 
-
     initializer 'kono_utils.append_views', :group => :all do |app|
       ActionController::Base.append_view_path KonoUtils::Engine.root.join("app", "views", "kono_utils")
     end
@@ -17,6 +16,10 @@ module KonoUtils
         c.application_helper_includes << KonoUtils::ApplicationCoreHelper
         c.base_editing_helper_includes << KonoUtils::BaseEditingCoreHelper
       end
+    end
+
+    initializer 'kono_utils.appen_custom_format', :group => :all do |app|
+      Mime::Type.register Mime[:js].to_s, :inject
     end
 
   end

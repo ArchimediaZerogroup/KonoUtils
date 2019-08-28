@@ -36,7 +36,7 @@ module KonoUtils
 
           respond_to do |format|
             format.html # index.html.erb
-            format.xml {render :xml => @objects}
+            format.xml { render :xml => @objects }
             unless respond_to_call.nil?
               respond_to_call.call(format)
             end
@@ -45,15 +45,19 @@ module KonoUtils
 
         # GET /utenti/new
         # GET /utenti/new.xml
+        # GET /utenti/new.inject -> javascript che si occupa di avere un js che injetta il risultato in un
+        #                           determinato target che deve essere passato tramite params,
+        #                           se non presente il target viene scritto un warning in console
         def new
           @object = base_class.new
           authorize @object
           @object = yield(@object) if block_given?
-          logger.debug {"Nuovo oggetto #{@object.inspect}"}
+          logger.debug { "Nuovo oggetto #{@object.inspect}" }
 
           respond_to do |format|
             format.html
-            format.xml {render :xml => @object}
+            format.xml { render :xml => @object }
+            format.inject { render :layout => false }
           end
         end
 
@@ -81,7 +85,7 @@ module KonoUtils
           @object = base_class.new(clean_params)
           authorize @object
           @object = yield(@object) if block_given?
-          logger.debug {"Nuovo oggetto #{@object.inspect}"}
+          logger.debug { "Nuovo oggetto #{@object.inspect}" }
 
           respond_to do |format|
             if @object.save
@@ -124,23 +128,24 @@ module KonoUtils
         protected
 
         def base_class
+          return @_base_class if @_base_class
           controller = controller_name
           modello = controller.singularize.camelize.safe_constantize
-          logger.debug {"Editazione del controller:#{controller} per modello: #{modello.to_s}"}
+          logger.debug { "Editazione del controller:#{controller} per modello: #{modello.to_s}" }
 
           raise "Non riesco a restituire la classe base per il controller #{controller}" if modello.nil?
 
-          modello
+          @_base_class = modello
         end
 
         private
+
         def load_object
           @object = base_class.find(params[:id])
           authorize @object
-          logger.debug {"Oggetto #{@object.inspect}"}
+          logger.debug { "Oggetto #{@object.inspect}" }
 
         end
-
 
 
         ##
@@ -153,15 +158,15 @@ module KonoUtils
         def clean_params
           permitted = policy(base_class.new).permitted_attributes
           dati = params.required(base_class.name.underscore.gsub('/', '_').to_sym).permit(permitted)
-          ::Rails.logger.info {"Permitted Attributes: #{permitted.inspect}"}
-          ::Rails.logger.info {"Parametri puliti: #{dati.inspect}"}
+          ::Rails.logger.info { "Permitted Attributes: #{permitted.inspect}" }
+          ::Rails.logger.info { "Parametri puliti: #{dati.inspect}" }
           dati
         end
 
         def check_errors
           unless @object.valid?
-            logger.debug {"Invalid Obj:"}
-            logger.debug {@object.errors.inspect}
+            logger.debug { "Invalid Obj:" }
+            logger.debug { @object.errors.inspect }
           end
         end
 
@@ -179,35 +184,35 @@ module KonoUtils
         end
 
         def _failed_destroy(format)
-          format.html {redirect_to index_custom_polymorphic_path(base_class),
-                                   :flash => {:error => @object.errors.full_messages.join(',')}}
-          format.xml {head :ko}
+          format.html { redirect_to index_custom_polymorphic_path(base_class),
+                                    :flash => {:error => @object.errors.full_messages.join(',')} }
+          format.xml { head :ko }
         end
 
         def _successful_destroy(format)
-          format.html {redirect_to index_custom_polymorphic_path(base_class),
-                                   :notice => success_destroy_message(@object)}
-          format.xml {head :ok}
+          format.html { redirect_to index_custom_polymorphic_path(base_class),
+                                    :notice => success_destroy_message(@object) }
+          format.xml { head :ok }
         end
 
         def _failed_create(format)
-          format.html {render :action => :new}
-          format.xml {render :xml => @object.errors, :status => :unprocessable_entity}
+          format.html { render :action => :new }
+          format.xml { render :xml => @object.errors, :status => :unprocessable_entity }
         end
 
         def _successful_create(format)
-          format.html {redirect_to edit_custom_polymorphic_path(@object), :notice => success_create_message(@object)}
-          format.xml {render :xml => @object, :status => :created, :location => @object}
+          format.html { redirect_to edit_custom_polymorphic_path(@object), :notice => success_create_message(@object) }
+          format.xml { render :xml => @object, :status => :created, :location => @object }
         end
 
         def _failed_update(format)
-          format.html {render :action => :edit}
-          format.xml {render :xml => @object.errors, :status => :unprocessable_entity}
+          format.html { render :action => :edit }
+          format.xml { render :xml => @object.errors, :status => :unprocessable_entity }
         end
 
         def _successful_update(format)
-          format.html {redirect_to edit_custom_polymorphic_path(@object), :notice => success_update_message(@object)}
-          format.xml {head :ok}
+          format.html { redirect_to edit_custom_polymorphic_path(@object), :notice => success_update_message(@object) }
+          format.xml { head :ok }
         end
       end
 
