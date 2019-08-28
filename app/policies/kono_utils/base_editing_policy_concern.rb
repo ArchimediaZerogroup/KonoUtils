@@ -14,9 +14,15 @@ module KonoUtils
       end
 
       ##
-      # elenco attributi editabili nella form, che come standard è un alias del permitted
+      # elenco attributi editabili nella form
       def editable_attributes
         cleard_columns
+      end
+
+      ##
+      # elenco attributi visualizzabili
+      def displayable_attributes
+        editable_attributes
       end
 
       ##
