@@ -183,6 +183,10 @@ module KonoUtils
           polymorphic_path(*rec)
         end
 
+        def destroy_custom_polymorphic_path(*rec)
+          polymorphic_path(*rec)
+        end
+
         def _failed_destroy(format)
           format.html { redirect_to index_custom_polymorphic_path(base_class),
                                     :flash => {:error => @object.errors.full_messages.join(',')} }
