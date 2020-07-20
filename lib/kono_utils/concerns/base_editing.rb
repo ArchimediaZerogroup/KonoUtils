@@ -191,12 +191,14 @@ module KonoUtils
           format.html { redirect_to index_custom_polymorphic_path(base_class),
                                     :flash => {:error => @object.errors.full_messages.join(',')} }
           format.xml { head :ko }
+          format.json { render json: {success: false, errors: @object.errors.to_json}, status: 422 }
         end
 
         def _successful_destroy(format)
           format.html { redirect_to index_custom_polymorphic_path(base_class),
                                     :notice => success_destroy_message(@object) }
           format.xml { head :ok }
+          format.json { render json: {success: true} }
         end
 
         def _failed_create(format)
@@ -218,7 +220,7 @@ module KonoUtils
         def _successful_update(format)
           format.html { redirect_to edit_custom_polymorphic_path(@object), :notice => success_update_message(@object) }
           format.xml { head :ok }
-          format.inject { render :action => :update, :layout => false }
+          format.inject { render :action => :show, :layout => false }
         end
       end
 
