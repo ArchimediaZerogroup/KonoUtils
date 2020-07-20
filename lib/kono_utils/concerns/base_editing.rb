@@ -212,11 +212,13 @@ module KonoUtils
         def _failed_update(format)
           format.html { render :action => :edit }
           format.xml { render :xml => @object.errors, :status => :unprocessable_entity }
+          format.inject { render :action => :edit, :layout => false }
         end
 
         def _successful_update(format)
           format.html { redirect_to edit_custom_polymorphic_path(@object), :notice => success_update_message(@object) }
           format.xml { head :ok }
+          format.inject { render :action => :update, :layout => false }
         end
       end
 
