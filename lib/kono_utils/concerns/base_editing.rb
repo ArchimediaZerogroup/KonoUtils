@@ -204,11 +204,13 @@ module KonoUtils
         def _failed_create(format)
           format.html { render :action => :new }
           format.xml { render :xml => @object.errors, :status => :unprocessable_entity }
+          format.inject { render :action => :edit, :layout => false }
         end
 
         def _successful_create(format)
           format.html { redirect_to edit_custom_polymorphic_path(@object), :notice => success_create_message(@object) }
           format.xml { render :xml => @object, :status => :created, :location => @object }
+          format.inject { render :action => :success_create_show, :layout => false }
         end
 
         def _failed_update(format)
@@ -220,7 +222,7 @@ module KonoUtils
         def _successful_update(format)
           format.html { redirect_to edit_custom_polymorphic_path(@object), :notice => success_update_message(@object) }
           format.xml { head :ok }
-          format.inject { render :action => :show, :layout => false }
+          format.inject { render :action => :success_update_show, :layout => false }
         end
       end
 
