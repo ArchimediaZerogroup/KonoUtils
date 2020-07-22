@@ -1,5 +1,5 @@
 #= require underscore/underscore
-#= require wolfy87-eventemitter/EventEmitter
+##= require wolfy87-eventemitter/EventEmitter
 
 @Kono = @Kono || {};
 
@@ -204,73 +204,73 @@
 # Eventi sulla tabella:
 # - row_append  : lanciato quando viene appeso una nuova riga, parametri: tabella,riga appena aggiunta
 # - row_removed : lanciato quando viene rimossa una nuova riga, parametri: tabella,riga appena rimossa
-$.fn.extend
-  multiple_table: (options) ->
-#    settings =
-#      label: ".form-label"
-#      content: ".form-wrapper"
+#$.fn.extend
+#  multiple_table: (options) ->
+##    settings =
+##      label: ".form-label"
+##      content: ".form-wrapper"
+##
+##    settings = $.extend settings, options
+#    return @each () ->
+#      tabella = @
+#      elaborate_buttons(tabella)
 #
-#    settings = $.extend settings, options
-    return @each () ->
-      tabella = @
-      elaborate_buttons(tabella)
-
-
-      $(tabella).on 'click', '.remove_row', (e)->
-        e.preventDefault()
-        row = $(@).closest('tr')
-        row.hide().addClass('multiple_table_remove_row')
-        $(@).find('[type="hidden"]').val('true')
-        elaborate_buttons(tabella)
-        $(tabella).trigger("row_removed", [tabella, row]);
-
-      $(tabella).on 'click', '.add_one_more', (e)->
-        e.preventDefault()
-        row = $(@).closest('tr').clone(false, true)
-        uid = $(@).closest('tbody').find('tr').length
-        $(row).find('input,select').val('').each ->
-          name = $(@).attr('name').replace(/\[[0-9]+\]/, "[#{uid}]")
-          $(@).attr('name', name)
-          $(@).removeAttr('disabled')
-
-        datapicker_containers= $(row).find(".tk_date_time_picker")
-        $(datapicker_containers).each (index,val) =>
-          new_id= $(val).attr("id").concat( new Date().getTime())
-          $(val).attr("id",new_id)
-
-          script = $(val).siblings("script")[0]
-          script_text = $(script).text();
-          new_script_text = script_text.replace(/'#.*'/,"'#"+new_id+"'")
-          script_parent= $(script).parent()
-          $(script).replaceWith('<script type=\'text/javascript\'>'+new_script_text+'</script>');
-
-        row.appendTo($(@).closest('tbody'))
-        elaborate_buttons(tabella)
-        $(tabella).trigger("row_append", [tabella, row]);
+#
+#      $(tabella).on 'click', '.remove_row', (e)->
+#        e.preventDefault()
+#        row = $(@).closest('tr')
+#        row.hide().addClass('multiple_table_remove_row')
+#        $(@).find('[type="hidden"]').val('true')
+#        elaborate_buttons(tabella)
+#        $(tabella).trigger("row_removed", [tabella, row]);
+#
+#      $(tabella).on 'click', '.add_one_more', (e)->
+#        e.preventDefault()
+#        row = $(@).closest('tr').clone(false, true)
+#        uid = $(@).closest('tbody').find('tr').length
+#        $(row).find('input,select').val('').each ->
+#          name = $(@).attr('name').replace(/\[[0-9]+\]/, "[#{uid}]")
+#          $(@).attr('name', name)
+#          $(@).removeAttr('disabled')
+#
+#        datapicker_containers= $(row).find(".tk_date_time_picker")
+#        $(datapicker_containers).each (index,val) =>
+#          new_id= $(val).attr("id").concat( new Date().getTime())
+#          $(val).attr("id",new_id)
+#
+#          script = $(val).siblings("script")[0]
+#          script_text = $(script).text();
+#          new_script_text = script_text.replace(/'#.*'/,"'#"+new_id+"'")
+#          script_parent= $(script).parent()
+#          $(script).replaceWith('<script type=\'text/javascript\'>'+new_script_text+'</script>');
+#
+#        row.appendTo($(@).closest('tbody'))
+#        elaborate_buttons(tabella)
+#        $(tabella).trigger("row_append", [tabella, row]);
 
 ##fine
 
 ## Gestione bottone di cancellazione
 # Precedentemente alla rimozione dell'elemento viene
 # lanciato un evento che notifica tale cancellazione "component_removed"
-$.fn.extend
-  kono_delete_button: ()->
-    return @each () ->
-      $(this).on 'submit', (e) ->
-        e.preventDefault()
-        form = $(this)
-        form.closest('.modal').modal('hide')
-        $.ajax
-          url: form.prop('action')
-          data: form.serialize()
-          method: 'DELETE'
-          success: (data)->
-            $('.modal-backdrop').remove() #rimuovo la modal
-            $('body').removeClass('modal-open') #rimuovo la classe che blocca
-            if data.success
-              base_component = $(form.data('callbackRemove'))
-              base_component.trigger('component_removed', [form.data('callbackRemove'), data]);
-              base_component.hide('fast').remove()
+#$.fn.extend
+#  kono_delete_button: ()->
+#    return @each () ->
+#      $(this).on 'submit', (e) ->
+#        e.preventDefault()
+#        form = $(this)
+#        form.closest('.modal').modal('hide')
+#        $.ajax
+#          url: form.prop('action')
+#          data: form.serialize()
+#          method: 'DELETE'
+#          success: (data)->
+#            $('.modal-backdrop').remove() #rimuovo la modal
+#            $('body').removeClass('modal-open') #rimuovo la classe che blocca
+#            if data.success
+#              base_component = $(form.data('callbackRemove'))
+#              base_component.trigger('component_removed', [form.data('callbackRemove'), data]);
+#              base_component.hide('fast').remove()
 
 
 ##
@@ -281,197 +281,197 @@ $.fn.extend
 #   rescue_invalid_content  -> self,response,jquery(dom modal)
 #   success                 -> ajax_response
 
-class ModalForm extends EventEmitter
-
-  defaults = {success: (->)}
-
-  constructor: (@modal, options = {}) ->
-    super
-    {@success} = _.extend defaults, options
-    @form = $(@modal).find('form').get(0)
-    @modal_id = $(@modal).attr('id')
-    @initialize_callbacks()
-
-  inject_format: (format = 'json')->
-    $(@form).append("<input type='hidden' value='#{format}' name='format'>")
-
-  close_modal: ->
-    $(@modal).modal('hide')
-    $('.modal-backdrop').remove()
-    $('body').removeClass('modal-open')
-    $(@form).get(0).reset()
-    @emitEvent('close_modal', [@]);
-
-  rescue_invalid_content: (response)->
-# ricevendo in risposta la modal sostituirò la modal attuale,
-# attacco tutte le opzioni di questa classe.
-    @close_modal()
-    mod = $(response.partial).appendTo($('body'))
-    id = Date.now()
-    $(mod).prop('id', id).modal('show')
-    modal = new @.__proto__.constructor(mod)
-    @propagate_events_on_child(modal)
-    @emitEvent('rescue_invalid_content', [@, response, modal])
-    return {response: response, modal: modal}
-
-
-# Si occupa di propagare gli eventi attaccati sul padre pannello sui vari figli
-  propagate_events_on_child: (child)->
-    events = @_getEvents()
-    _.each events, (v, k) =>
-      child.on k, =>
-        @emitEvent(k, arguments)
-
-
-  initialize_callbacks: ->
-    @inject_format()
-    $(@form).on 'submit', (e) =>
-      Kn.show_wait()
-      e.preventDefault()
-      $.ajax
-        url: $(@form).prop('action')
-        method: $(@form).prop('method')
-        data: $(@form).serialize()
-        success: =>
-          @_on_success(arguments)
-        error: (xhr) =>
-          @_on_error(xhr)
-
-##
-# funzione privata eseguita al success
-  _on_success: (args)->
-    @close_modal()
-    Kn.hide_wait()
-    @emitEvent('success', args);
-
-  _on_error: (xhr)->
-    Kn.hide_wait()
-    switch parseInt(xhr.status/100)*100
-      when 400 then @rescue_invalid_content(xhr.responseJSON)
-      when 500 then alert("Attenzione, problemi nello svolgimento dell'operazione contattare amministratore")
-
-
-@Kn.ns 'Kn.utilities', (exports)->
-  exports.ModalForm = ModalForm
-
-
-class ModalNewButton extends ModalForm
-
-  ##
-  # Funzione per ricaricare la modal
-  # Esegue un'ajax alla pagina corrente, ricercando l'elemento con l'id uguale a quello di se stesso,
-  # rimpiazza quindi la precedente modal di creazione e riattacca tutti gli eventi al modal appena creato.
-  # sucessivamente rimuove l'elemento iniziale e lancia l'evento "self_reloaded" per poter far eventualemnte ulteriori
-  # modifiche sul modal appena generato
-  self_reload: ()->
-    @_self_reload(@)
-
-  _self_reload: ()->
-    Kn.show_wait()
-    id = "tmp#{(new Date()).getTime()}"
-    $('body').append("<div id='#{id}'></div>")
-    $("##{id}").load "#{window.location.href} ##{@modal_id}", ()=>
-      ele = $("##{id}>*")
-      $(ele).attr('generated_id', id)
-      pre_modal = $("##{@modal_id}")
-      pre_modal.after(ele)
-      modal = new @__proto__.constructor(ele)
-      @propagate_events_on_child(modal)
-      @emitEvent('self_reloaded', [modal, @])
-      pre_modal.remove()
-      Kn.hide_wait()
-
-
-@Kn.ns 'Kn.utilities', (exports)->
-  exports.ModalNewButton = ModalNewButton
-
-
-###
-Classe che gestisce la UI per il bottone edit
-
-###
-class ModalEditButton extends ModalForm
-
-  constructor: (@btn_blk, options = {}) ->
-    @updatable_content = $(@btn_blk).data('updatableContent')
-    if $(@btn_blk).hasClass('kono_modal_form')
-      super(@btn_blk, options)
-    else
-      super($(@btn_blk).find('.kono_modal_form').get(0), options)
-
-  _on_success: (args)->
-    super
-    data = args[0]
-    if @updatable_content
-      $(@updatable_content).replaceWith(data.partial)
-      #seleziono il nuovo pannello
-      panel = $(@updatable_content)
-      panel.find('.kono_edit_button').each (index,ele) =>
-        new_panel = new @.__proto__.constructor(ele)
-        new_panel.modal.updatable_content = @updatable_content
-        #rillacciamo gli eventi del vecchio pannello su quello nuovo
-        @propagate_events_on_child(new_panel)
-        @emitEvent('rendered', [@, panel, new_panel])
-
-  rescue_invalid_content: (response)->
-    res = super
-    res.modal.updatable_content = @updatable_content
-
-
-  initial_classes: ->
-    _.reduce _.compact($(@btn_blk).prop('class').split(' ')), (memo, str)->
-      "#{memo}.#{str}"
-    , ''
-
-
-@Kn.ns 'Kn.utilities', (exports)->
-  exports.ModalEditButton = ModalEditButton
-
-
-class BasePannel
-
-  form_inline_settings:
-    label_cls: 'col-xs-12 col-sm-4',
-    wrapp_cls: 'col-xs-12 col-sm-8'
-
-  constructor: (@blk) ->
-    $(@blk).bs3_form_inline @form_inline_settings
-    @initialize_events()
-
-  initialize_events: ->
-    ele = $(@blk).find('.kono_edit_button').get(0)
-    if(ele)
-      panel = new Kn.utilities.ModalEditButton ele
-      panel.on 'rendered', (button, panel)->
-        $(panel).bs3_form_inline @form_inline_settings
-      panel.on 'rescue_invalid_content', (a, b, c)->
-        $(c.modal).bs3_form_inline @form_inline_settings
-
-@Kn.ns 'Kn.utilities', (exports)->
-  exports.BasePannel = BasePannel
-
-## Gestione Generazione Mappa google per Input LocationPicker
+#class ModalForm extends EventEmitter
 #
-$.fn.extend
-  kono_util_location_picker: (options)->
-    settings =
-      center: {lat: 42.908, lng: 12.303}
-      selector_field_lat: 'input[name="lat"]'
-      selector_field_lng: 'input[name="lat"]'
-      zoom_level: 5
-
-    settings = $.extend settings, options
-
-    return @each () ->
-      map = new google.maps.Map(@, {
-        zoom: settings.zoom_level,
-        center: settings.center
-      })
-      marker = new google.maps.Marker({
-        position: settings.center,
-        draggable: true,
-        map: map
-      })
-      marker.addListener 'drag', (data) ->
-        $(settings.selector_field_lat).val(data.latLng.lat())
-        $(settings.selector_field_lng).val(data.latLng.lng())
+#  defaults = {success: (->)}
+#
+#  constructor: (@modal, options = {}) ->
+#    super
+#    {@success} = _.extend defaults, options
+#    @form = $(@modal).find('form').get(0)
+#    @modal_id = $(@modal).attr('id')
+#    @initialize_callbacks()
+#
+#  inject_format: (format = 'json')->
+#    $(@form).append("<input type='hidden' value='#{format}' name='format'>")
+#
+#  close_modal: ->
+#    $(@modal).modal('hide')
+#    $('.modal-backdrop').remove()
+#    $('body').removeClass('modal-open')
+#    $(@form).get(0).reset()
+#    @emitEvent('close_modal', [@]);
+#
+#  rescue_invalid_content: (response)->
+## ricevendo in risposta la modal sostituirò la modal attuale,
+## attacco tutte le opzioni di questa classe.
+#    @close_modal()
+#    mod = $(response.partial).appendTo($('body'))
+#    id = Date.now()
+#    $(mod).prop('id', id).modal('show')
+#    modal = new @.__proto__.constructor(mod)
+#    @propagate_events_on_child(modal)
+#    @emitEvent('rescue_invalid_content', [@, response, modal])
+#    return {response: response, modal: modal}
+#
+#
+## Si occupa di propagare gli eventi attaccati sul padre pannello sui vari figli
+#  propagate_events_on_child: (child)->
+#    events = @_getEvents()
+#    _.each events, (v, k) =>
+#      child.on k, =>
+#        @emitEvent(k, arguments)
+#
+#
+#  initialize_callbacks: ->
+#    @inject_format()
+#    $(@form).on 'submit', (e) =>
+#      Kn.show_wait()
+#      e.preventDefault()
+#      $.ajax
+#        url: $(@form).prop('action')
+#        method: $(@form).prop('method')
+#        data: $(@form).serialize()
+#        success: =>
+#          @_on_success(arguments)
+#        error: (xhr) =>
+#          @_on_error(xhr)
+#
+###
+## funzione privata eseguita al success
+#  _on_success: (args)->
+#    @close_modal()
+#    Kn.hide_wait()
+#    @emitEvent('success', args);
+#
+#  _on_error: (xhr)->
+#    Kn.hide_wait()
+#    switch parseInt(xhr.status/100)*100
+#      when 400 then @rescue_invalid_content(xhr.responseJSON)
+#      when 500 then alert("Attenzione, problemi nello svolgimento dell'operazione contattare amministratore")
+#
+#
+#@Kn.ns 'Kn.utilities', (exports)->
+#  exports.ModalForm = ModalForm
+#
+#
+#class ModalNewButton extends ModalForm
+#
+#  ##
+#  # Funzione per ricaricare la modal
+#  # Esegue un'ajax alla pagina corrente, ricercando l'elemento con l'id uguale a quello di se stesso,
+#  # rimpiazza quindi la precedente modal di creazione e riattacca tutti gli eventi al modal appena creato.
+#  # sucessivamente rimuove l'elemento iniziale e lancia l'evento "self_reloaded" per poter far eventualemnte ulteriori
+#  # modifiche sul modal appena generato
+#  self_reload: ()->
+#    @_self_reload(@)
+#
+#  _self_reload: ()->
+#    Kn.show_wait()
+#    id = "tmp#{(new Date()).getTime()}"
+#    $('body').append("<div id='#{id}'></div>")
+#    $("##{id}").load "#{window.location.href} ##{@modal_id}", ()=>
+#      ele = $("##{id}>*")
+#      $(ele).attr('generated_id', id)
+#      pre_modal = $("##{@modal_id}")
+#      pre_modal.after(ele)
+#      modal = new @__proto__.constructor(ele)
+#      @propagate_events_on_child(modal)
+#      @emitEvent('self_reloaded', [modal, @])
+#      pre_modal.remove()
+#      Kn.hide_wait()
+#
+#
+#@Kn.ns 'Kn.utilities', (exports)->
+#  exports.ModalNewButton = ModalNewButton
+#
+#
+####
+#Classe che gestisce la UI per il bottone edit
+#
+####
+#class ModalEditButton extends ModalForm
+#
+#  constructor: (@btn_blk, options = {}) ->
+#    @updatable_content = $(@btn_blk).data('updatableContent')
+#    if $(@btn_blk).hasClass('kono_modal_form')
+#      super(@btn_blk, options)
+#    else
+#      super($(@btn_blk).find('.kono_modal_form').get(0), options)
+#
+#  _on_success: (args)->
+#    super
+#    data = args[0]
+#    if @updatable_content
+#      $(@updatable_content).replaceWith(data.partial)
+#      #seleziono il nuovo pannello
+#      panel = $(@updatable_content)
+#      panel.find('.kono_edit_button').each (index,ele) =>
+#        new_panel = new @.__proto__.constructor(ele)
+#        new_panel.modal.updatable_content = @updatable_content
+#        #rillacciamo gli eventi del vecchio pannello su quello nuovo
+#        @propagate_events_on_child(new_panel)
+#        @emitEvent('rendered', [@, panel, new_panel])
+#
+#  rescue_invalid_content: (response)->
+#    res = super
+#    res.modal.updatable_content = @updatable_content
+#
+#
+#  initial_classes: ->
+#    _.reduce _.compact($(@btn_blk).prop('class').split(' ')), (memo, str)->
+#      "#{memo}.#{str}"
+#    , ''
+#
+#
+#@Kn.ns 'Kn.utilities', (exports)->
+#  exports.ModalEditButton = ModalEditButton
+#
+#
+#class BasePannel
+#
+#  form_inline_settings:
+#    label_cls: 'col-xs-12 col-sm-4',
+#    wrapp_cls: 'col-xs-12 col-sm-8'
+#
+#  constructor: (@blk) ->
+#    $(@blk).bs3_form_inline @form_inline_settings
+#    @initialize_events()
+#
+#  initialize_events: ->
+#    ele = $(@blk).find('.kono_edit_button').get(0)
+#    if(ele)
+#      panel = new Kn.utilities.ModalEditButton ele
+#      panel.on 'rendered', (button, panel)->
+#        $(panel).bs3_form_inline @form_inline_settings
+#      panel.on 'rescue_invalid_content', (a, b, c)->
+#        $(c.modal).bs3_form_inline @form_inline_settings
+#
+#@Kn.ns 'Kn.utilities', (exports)->
+#  exports.BasePannel = BasePannel
+#
+### Gestione Generazione Mappa google per Input LocationPicker
+##
+#$.fn.extend
+#  kono_util_location_picker: (options)->
+#    settings =
+#      center: {lat: 42.908, lng: 12.303}
+#      selector_field_lat: 'input[name="lat"]'
+#      selector_field_lng: 'input[name="lat"]'
+#      zoom_level: 5
+#
+#    settings = $.extend settings, options
+#
+#    return @each () ->
+#      map = new google.maps.Map(@, {
+#        zoom: settings.zoom_level,
+#        center: settings.center
+#      })
+#      marker = new google.maps.Marker({
+#        position: settings.center,
+#        draggable: true,
+#        map: map
+#      })
+#      marker.addListener 'drag', (data) ->
+#        $(settings.selector_field_lat).val(data.latLng.lat())
+#        $(settings.selector_field_lng).val(data.latLng.lng())

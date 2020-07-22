@@ -43,7 +43,7 @@ module KonoUtils
 
 
     def install_node_dependency
-      pacchetti_yarn = ["wolfy87-eventemitter","underscore"]
+      pacchetti_yarn = ["underscore"]#"wolfy87-eventemitter",
 
       run "yarn add #{pacchetti_yarn.join(" ")}"
     end
