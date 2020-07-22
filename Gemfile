@@ -19,7 +19,7 @@ gemspec
 # gem 'byebug', group: [:development, :test]
 
 
-gem 'kono_utils_helpers', path: '../kono_utils_helpers'
+gem 'kono_utils_helpers', path: '../KonoUtilsHelpers'
 
 ##
 # Per testare le varie modalità di visualizzazione includiamo qua dentro le gemme

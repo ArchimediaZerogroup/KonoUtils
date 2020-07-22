@@ -1,5 +1,5 @@
 PATH
-  remote: ../kono_utils_helpers
+  remote: ../KonoUtilsHelpers
   specs:
     kono_utils_helpers (0.1.0)
       actionview
@@ -43,7 +43,7 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.0.3)
-    active_type (1.2.1)
+    active_type (1.3.2)
       activerecord (>= 3.2)
     activejob (5.2.3)
       activesupport (= 5.2.3)
