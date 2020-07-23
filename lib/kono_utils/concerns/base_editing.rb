@@ -21,7 +21,7 @@ module KonoUtils
         helper_method :new_custom_polymorphic_path
         helper_method :edit_custom_polymorphic_path
         helper_method :index_custom_polymorphic_path
-        after_action :check_errors, only: [:create, :update]
+        after_action :check_errors, only: [:create, :update], if: -> { ::Rails.env.development? }
 
         ##
         # E' possibile passare una callback per poter
@@ -149,10 +149,24 @@ module KonoUtils
 
 
         ##
-        # Scope iniziale per index, sovrascrivibile per poter inizializzare ricerca,
-        # viene passato al policy_scope in index
+        # Scope iniziale per index, viene passato al policy_scope in index.
+        # nel caso sia stata attivata la ricerca, lo scope viene filtrato
         def base_scope
-          base_class
+          if @search
+            @search.make_query
+          else
+            base_class
+          end
+        end
+
+        ##
+        # Metodo per il load della ricerca, precaricherà la classe per la ricerca
+        # e andrà a modificare il comportamento di base_scope in modo che sia utilizzato
+        # la ricerca come scope iniziale dei records
+        def load_search
+          # search_class non esiste, deve essere implementata dall'utente o settata durante il settaggio della classe
+          #noinspection RubyResolve
+          @search = search_class.new
         end
 
         def clean_params
@@ -226,10 +240,34 @@ module KonoUtils
         end
       end
 
-      # module ClassMethods
-      #
-      #
-      # end
+      module ClassMethods
+
+        def setup_search(search_class: nil)
+
+          # se passata la classe,
+          if search_class
+            self.class_attribute :search_class
+            self.search_class = search_class
+          end
+
+
+          ##
+          # Eseguiamo una serie di controlli per vedere se c'è tutto il necessario
+          if ::Rails.env.development?
+            out = []
+            if search_class.nil?
+              unless self.respond_to?(:search_class)
+                out << "il controller deve rispondere al methodo search_class ritornando una classe figlia di
+                        KonoUtils::BaseSearch oppure configurarlo con il setup passato il valore al parametro
+                        search_class"
+              end
+            end
+            raise out.join("\n") unless out.empty?
+          end
+          self.before_action :load_search, only: [:index]
+        end
+
+      end
     end
   end
 end

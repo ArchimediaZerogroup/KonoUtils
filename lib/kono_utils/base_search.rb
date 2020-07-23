@@ -10,6 +10,12 @@ module KonoUtils
       end
     end
 
+    class UndefinedSearchModelScope < StandardError
+      def initialize(model)
+        super("La classe #{model.name} non ha definito lo scope search")
+      end
+    end
+
     class_attribute :_search_model, :_search_attributes, instance_writer: false
     attr_accessor :scope
 
@@ -111,6 +117,7 @@ module KonoUtils
 
     def initialize(attributes = nil)
       raise UndefinedSearchModel if search_model.nil?
+      raise UndefinedSearchModelScope.new(search_model) unless search_model.respond_to? :search
       super
       self.scope = self.class._search_model
     end
