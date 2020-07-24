@@ -32,7 +32,19 @@ module KonoUtils
     def self.set_search_model(model)
       self._search_model = model
     end
-    
+
+    ##
+    # Restituisce il modello di ricerca
+    def search_model
+      self.class._search_model
+    end
+
+    ##
+    # alias method di classe
+    def self.search_model
+      self._search_model
+    end
+
     ##
     # Definisce gli attributi da utilizzare per la ricerca
     # passandogli un hash finale si possono passare parametri di default
@@ -80,25 +92,16 @@ module KonoUtils
 
         attr_accessor(a.to_sym)
 
-        # instance_variable_set "@#{a}".to_sym, nil
-        #
-        # unless method_defined? a.to_sym
         define_method(a.to_sym) do
           run_callbacks "search_attr_#{a}" do
-            # logger.debug { "Chiamata a metodo virtuale #{a} " }
             instance_variable_get "@#{a}".to_sym
           end
         end
-        # end
-        #
-        # unless method_defined? "#{a}=".to_sym
         define_method("#{a}=".to_sym) do |*args|
           run_callbacks "search_attr_#{a}_set" do
-            # logger.debug { "Chiamata a metodo virtuale #{a}= -> #{args.inspect}" }
             instance_variable_set "@#{a}".to_sym, *args
           end
         end
-        # end
 
 
         #Definisco delle callbacks per ogni attributo
@@ -108,11 +111,6 @@ module KonoUtils
       self._search_attributes.uniq!
     end
 
-    ##
-    # Restituisce il modello di ricerca
-    def search_model
-      self.class._search_model
-    end
 
     ##
     # Attributi di ricerca
@@ -160,7 +158,7 @@ module KonoUtils
     def get_query_params
       out = {}
       search_attributes.each do |val|
-        out[val.field]=self.send(val.field) unless self.send(val.field).blank?
+        out[val.field] = self.send(val.field) unless self.send(val.field).blank?
       end
 
       out

@@ -168,14 +168,33 @@ module KonoUtils
           #@type [KonoUtils::BaseSearch]
           #noinspection RubyResolve
           @search = search_class.new
+          permitted = policy(@search).permitted_attributes
+          dati = require_params_for(search_class).permit(permitted)
+          ::Rails.logger.info { "Permitted Attributes: #{permitted.inspect}" }
+          ::Rails.logger.info { "Parametri puliti: #{dati.inspect}" }
+          @search.update_attributes(dati)
+
         end
 
         def clean_params
           permitted = policy(base_class.new).permitted_attributes
-          dati = params.required(base_class.name.underscore.gsub('/', '_').to_sym).permit(permitted)
+          dati = require_params_for!(base_class).permit(permitted)
           ::Rails.logger.info { "Permitted Attributes: #{permitted.inspect}" }
           ::Rails.logger.info { "Parametri puliti: #{dati.inspect}" }
           dati
+        end
+
+        ##
+        # Estrapola i parametri dalla classe in questione, partendo da params, fancendo un require
+        def require_params_for!(klass)
+          required_params_name = klass.name.underscore.gsub('/', '_').to_sym
+          Rails.logger.info {"Required attibute: #{required_params_name}"}
+          params.required(required_params_name)
+        end
+        ##
+        # Come sopra. ma fallendo su un ActionController::Parameters vuoto
+        def require_params_for(klass)
+          require_params_for!(klass) rescue ActionController::Parameters.new({})
         end
 
         def check_errors
@@ -249,15 +268,35 @@ module KonoUtils
         # @param [String] search_class
         def setup_search(search_class: nil)
 
-          # se passata la classe,
-          if search_class
-            self.class_attribute :search_class
-            self.search_class = search_class.to_s.constantize
-          end
-
+          install_search_class(search_class)
           development_search_setup_checks
 
-          self.before_action :load_search, only: [:index]
+          before_action :load_search, only: [:index]
+        end
+
+
+        def setup_search_controller(search_class: nil)
+          install_search_class(search_class)
+          development_search_setup_checks
+
+          # Sul controller della ricerca, ridefiniamo la classe base, im modo che vada a trovare il modello della
+          # classe di ricerca
+          redefine_method :base_class do
+            self.search_class.search_model
+          end
+
+        end
+
+        protected
+
+        def install_search_class(search_class_name = nil)
+          # se passata la classe,
+          if search_class_name
+            define_singleton_method :search_class do
+              search_class_name.to_s.constantize
+            end
+            delegate :search_class, to: :class
+          end
         end
 
         ##
@@ -271,11 +310,25 @@ module KonoUtils
               # controlliamo le rotte:
               unless self.search_class.new.search_form_builder.search_path
                 out << "- Non hai definito la rotta per il controller della ricerca, inserisci nelle rotte del progetto:
-                            namespace :#{self.search_class._search_model.name.to_s.pluralize.downcase } do
+                            namespace :#{self.search_class.search_model.name.to_s.pluralize.downcase } do
                               resources :searches, :only => [:index, :create]
                             end
-                          "
+                          ATTENZIONE deve essere sopra alla rotta della risorsa, altrimenti verrà mechata prima la
+                          show del controller principale
+                          ------------------
+                          Oppure la classe specializzata del search_form_builder non ritorna correttamente una path"
               end
+              #controlliamo pundit
+              policy = Pundit::PolicyFinder.new(self.search_class).policy
+              if policy
+                unless policy.included_modules.include?(KonoUtils::BaseSearchFormPolicyConcern)
+                  out << "- Nella policy #{policy.name} non hai incluso il concern: KonoUtils::BaseSearchFormPolicyConcern"
+                end
+              else
+                out << "- Non hai definito la policy per la classe #{self.search_class.name}"
+              end
+
+
             else
               out << "- Il controller deve rispondere al methodo search_class ritornando una classe figlia di
                         KonoUtils::BaseSearch oppure configurarlo con il setup passato il valore al parametro
