@@ -165,6 +165,7 @@ module KonoUtils
         # la ricerca come scope iniziale dei records
         def load_search
           # search_class non esiste, deve essere implementata dall'utente o settata durante il settaggio della classe
+          #@type [KonoUtils::BaseSearch]
           #noinspection RubyResolve
           @search = search_class.new
         end
@@ -242,29 +243,47 @@ module KonoUtils
 
       module ClassMethods
 
+        #@!attribute search_class
+        # @return [KonoUtils::BaseSearch]
+
+        # @param [String] search_class
         def setup_search(search_class: nil)
 
           # se passata la classe,
           if search_class
             self.class_attribute :search_class
-            self.search_class = search_class
+            self.search_class = search_class.to_s.constantize
           end
 
+          development_search_setup_checks
 
-          ##
-          # Eseguiamo una serie di controlli per vedere se c'è tutto il necessario
+          self.before_action :load_search, only: [:index]
+        end
+
+        ##
+        # Funzione che esegue un check generale sulle configurazioni del setup della ricerca
+        # per semplificare la vita allo sviluppatore.
+        # Vengono fatti i controlli solamente nell'env di sviluppo
+        def development_search_setup_checks
           if ::Rails.env.development?
             out = []
-            if search_class.nil?
-              unless self.respond_to?(:search_class)
-                out << "il controller deve rispondere al methodo search_class ritornando una classe figlia di
+            if self.respond_to?(:search_class)
+              # controlliamo le rotte:
+              unless self.search_class.new.search_form_builder.search_path
+                out << "- Non hai definito la rotta per il controller della ricerca, inserisci nelle rotte del progetto:
+                            namespace :#{self.search_class._search_model.name.to_s.pluralize.downcase } do
+                              resources :searches, :only => [:index, :create]
+                            end
+                          "
+              end
+            else
+              out << "- Il controller deve rispondere al methodo search_class ritornando una classe figlia di
                         KonoUtils::BaseSearch oppure configurarlo con il setup passato il valore al parametro
                         search_class"
-              end
             end
+
             raise out.join("\n") unless out.empty?
           end
-          self.before_action :load_search, only: [:index]
         end
 
       end

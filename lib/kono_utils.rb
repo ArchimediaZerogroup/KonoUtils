@@ -13,6 +13,7 @@ module KonoUtils
 
   # Classi interne
   autoload :PaginateProxer
+  autoload :SearchFormBuilder
 
   autoload :ApplicationHelper
   autoload :ApplicationCoreHelper
@@ -27,10 +28,14 @@ module KonoUtils
     attr_accessor :base_editing_helper_includes
     attr_accessor :pagination_proxer
 
+    #@return [KonoUtils::SearchFormBuilder]
+    attr_accessor :search_form_builder
+
     def initialize
       @application_helper_includes = []
       @base_editing_helper_includes = []
-      @pagination_proxer = KonoUtils::PaginateProxer
+      @pagination_proxer = ::KonoUtils::PaginateProxer
+      @search_form_builder = ::KonoUtils::SearchFormBuilder
     end
   end
 

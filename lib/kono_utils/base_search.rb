@@ -19,6 +19,11 @@ module KonoUtils
     class_attribute :_search_model, :_search_attributes, instance_writer: false
     attr_accessor :scope
 
+    class_attribute :search_form_builder_class, default: KonoUtils.configuration.search_form_builder
+
+    #@return [KonoUtils::SearchFormBuilder] istanziato
+    attr_reader :search_form_builder
+
     define_model_callbacks :set_scope, :make_query
 
     ##
@@ -27,7 +32,7 @@ module KonoUtils
     def self.set_search_model(model)
       self._search_model = model
     end
-
+    
     ##
     # Definisce gli attributi da utilizzare per la ricerca
     # passandogli un hash finale si possono passare parametri di default
@@ -120,13 +125,14 @@ module KonoUtils
       raise UndefinedSearchModelScope.new(search_model) unless search_model.respond_to? :search
       super
       self.scope = self.class._search_model
+      @search_form_builder = search_form_builder_class.new(self)
     end
 
 
     ##
     #  deve indicarmi se i dati della ricerca sono stati inseriti
     def data_loaded?
-      get_query_params.length>0
+      get_query_params.length > 0
     end
 
     ##
