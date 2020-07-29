@@ -48,5 +48,16 @@ module KonoUtils
       run "yarn add #{pacchetti_yarn.join(" ")}"
     end
 
+    def base_editing_install
+      resp = ask "Vuoi che installi la struttura base del controller e base editing? y/n"
+      if resp=='y'
+        @controller_da_cui_derivare = ask("Controller da cui derivare il BaseEditingController?[RestrictedAreaController]")
+        @controller_da_cui_derivare = "RestrictedAreaController" if @controller_da_cui_derivare.blank?
+        template('base_editing_controller.template','app/controllers/base_editing_controller.rb')
+        template('base_editing_helper.template','app/helpers/base_editing_helper.rb')
+        say "Tutti i Controller che dovranno lavorare con il base editing dovranno derivare da BaseEditingController"
+      end
+    end
+
   end
 end
