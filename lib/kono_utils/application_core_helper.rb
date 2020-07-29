@@ -14,6 +14,11 @@ module KonoUtils
     # end
 
 
+    ##
+    # Crea un DIV che racchiude tutto il contenuto all'interno della classe utilizzata, splittando il nome della classe
+    # per suoi moduli, rendendo quindi filtrabile il contenuto sottostante
+    # @param [Proc] block -> contenuto che verrà inserito nel content
+    # @return [String]
     def namespace_content(&block)
       content_tag :div, class: "#{(controller.class.name.split("::") + [action_name]).join(" ")}" do
         yield
@@ -124,19 +129,19 @@ module KonoUtils
 
     ##
     # Utility interna che si occupa della logica minima per generare la il form di ricerca
-    def base_search_form_wrapper(search_model, args={:attributes => [], :form_opts => {}})
-      attributes = args[:attributes] || {}
-      form_opts = args[:form_opts] || {}
-      if attributes.length==0
-        attributes = search_model.search_attributes
-      end
-
-      form_opts = {method: :get, :html => {autocomplete: 'off'}}.merge(form_opts)
-
-      semantic_form_for search_model, form_opts do |f|
-        yield BaseSearchFormWrapper.new(f, attributes, @current_user)
-      end
-    end
+    # def base_search_form_wrapper(search_model, args={:attributes => [], :form_opts => {}})
+    #   attributes = args[:attributes] || {}
+    #   form_opts = args[:form_opts] || {}
+    #   if attributes.length==0
+    #     attributes = search_model.search_attributes
+    #   end
+    #
+    #   form_opts = {method: :get, :html => {autocomplete: 'off'}}.merge(form_opts)
+    #
+    #   semantic_form_for search_model, form_opts do |f|
+    #     yield BaseSearchFormWrapper.new(f, attributes, @current_user)
+    #   end
+    # end
 
 
 
