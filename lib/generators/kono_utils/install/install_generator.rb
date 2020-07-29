@@ -24,11 +24,11 @@ module KonoUtils
     end
 
     def install_helper_on_application_helper
-      inject_into_file 'app/helpers/application_helper.rb', "\ninclude KonoUtils::ApplicationHelper", after: "module ApplicationHelper"
+      inject_into_file 'app/helpers/application_helper.rb', "\n  include KonoUtils::ApplicationHelper", after: "module ApplicationHelper"
     end
 
     def install_active_record_traslation_on_application_record
-      inject_into_file 'app/models/application_record.rb', "\ninclude KonoUtils::Concerns::ActiveRecordTranslation\n", after: "ActiveRecord::Base"
+      inject_into_file 'app/models/application_record.rb', "\n  include KonoUtils::Concerns::ActiveRecordTranslation\n", after: "ActiveRecord::Base"
     rescue Exception => e
       puts "Attenzione, includere a mano KonoUtils::Concerns::ActiveRecordTranslation
             nel modello da cui darivano i modelli del base editing - #{e.message}"
