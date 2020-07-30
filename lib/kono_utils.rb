@@ -17,6 +17,7 @@ module KonoUtils
 
   autoload :ApplicationHelper
   autoload :ApplicationCoreHelper
+  autoload :ApplicationEnumHelper
   autoload :BaseEditingHelper
   autoload :BaseEditingCoreHelper
   autoload :BaseSearch

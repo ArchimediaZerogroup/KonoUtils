@@ -14,6 +14,7 @@ module KonoUtils
     initializer 'kono_utils.append_helpers', :group => :all do |app|
       KonoUtils.configure do |c|
         c.application_helper_includes << KonoUtils::ApplicationCoreHelper
+        c.application_helper_includes << KonoUtils::ApplicationEnumHelper
         c.base_editing_helper_includes << KonoUtils::BaseEditingCoreHelper
       end
     end

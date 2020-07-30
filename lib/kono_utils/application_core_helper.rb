@@ -144,65 +144,6 @@ module KonoUtils
     # end
 
 
-
-
-
-    ##
-    # Genera l'hash da passare come collection alle selectbox, esegue anche la traduzione con locale
-    #
-    #   <%= f.input :usage, :as => :select,
-    #                :collection => enum_collection(Logo, :usage), :input_html => {:include_blank => true} %>
-    #
-    # * *Args*    :
-    #   - model     -> ActiveRecord model contenente l'enum
-    #   - attribute -> Symbol che identifica l'attributo dell'enum
-    #   - variant   -> se c'è la variante questa viene inserite _#{variant} dopo il nome del valore
-    # * *Returns* :
-    #   - Hash
-    #
-    def enum_collection(model, attribute, variant=nil)
-
-      model.send(attribute.to_s.pluralize(2).to_sym).collect {|key, val|
-        [enum_translation(model, attribute, key, variant), key]
-      }.to_h
-    end
-
-
-    ##
-    # Si occupa di tradurre un determinato valore di un enum
-    #   - model     -> ActiveRecord model contenente l'enum
-    #   - attribute -> Symbol che identifica l'attributo dell'enum
-    #   - variant   -> se c'è la variante questa viene inserite _#{variant} dopo il nome del valore
-    #
-    # * *Returns* :
-    #   - String
-    #
-    def enum_translation(model, attribute, value, variant=nil)
-      ApplicationHelper.enum_translation(model, attribute, value, variant)
-    end
-
-
-    ##
-    # Le traduzioni dentro al locale devono essere fatte in questo modo:
-    # it:
-    #   activerecord:
-    #     attributes:
-    #       estimate_before/value:
-    #         na: NA
-    #         very_insufficient: 1
-    #         insufficient: 2
-    #         sufficient: 3
-    #         excellent: 4
-    #
-    # dove in questo caso  estimate_before è il modello e value è il nome del campo enum
-    #
-    def self.enum_translation(model, attribute, value, variant=nil)
-      return '' if value.nil?
-      variant = "_#{variant}" unless variant.nil?
-      model.human_attribute_name("#{attribute}.#{value}#{variant}")
-    end
-
-
     ##
     # Helper per generare una modal con all'interno un form
     # Utilizzare passando un block il quale riceve come parametro la form di formtastic
