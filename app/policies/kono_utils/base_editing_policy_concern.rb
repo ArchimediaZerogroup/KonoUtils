@@ -20,13 +20,13 @@ module KonoUtils
       end
 
       ##
-      # elenco attributi visualizzabili
+      # elenco attributi visualizzabili nella show
       def displayable_attributes
         editable_attributes
       end
 
       ##
-      # Elenco attributi da visualizzare
+      # Elenco attributi da visualizzare, utilizzati nella vista della index
       def show_attributes
         cleard_columns
       end
