@@ -23,6 +23,8 @@ module KonoUtils
         helper_method :index_custom_polymorphic_path
         after_action :check_errors, only: [:create, :update], if: -> { ::Rails.env.development? }
 
+        rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+
         ##
         # E' possibile passare una callback per poter
         # renderizzare ulteriori formati oppure cambiare la normale
@@ -139,6 +141,12 @@ module KonoUtils
         end
 
         private
+
+        def user_not_authorized
+          flash[:alert] = t('.user_not_authorized', :model => @object.mn,
+                            default: t('kono_utils.user_not_authorized', :model => @object.mn, default: "You are not authorized to perform this action."))
+          redirect_to(request.referrer || root_path)
+        end
 
         def load_object
           @object = base_class.find(params[:id])
