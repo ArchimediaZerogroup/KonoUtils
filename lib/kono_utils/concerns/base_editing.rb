@@ -188,9 +188,10 @@ module KonoUtils
         # Estrapola i parametri dalla classe in questione, partendo da params, fancendo un require
         def require_params_for!(klass)
           required_params_name = klass.name.underscore.gsub('/', '_').to_sym
-          Rails.logger.info {"Required attibute: #{required_params_name}"}
+          Rails.logger.info { "Required attibute: #{required_params_name}" }
           params.required(required_params_name)
         end
+
         ##
         # Come sopra. ma fallendo su un ActionController::Parameters vuoto
         def require_params_for(klass)
@@ -236,7 +237,10 @@ module KonoUtils
         end
 
         def _failed_create(format)
-          format.html { render :action => :new }
+          format.html do
+            flash.now[:error] = @object.errors.full_messages.join(',')
+            render :action => :new
+          end
           format.xml { render :xml => @object.errors, :status => :unprocessable_entity }
           format.inject { render :action => :edit, :layout => false }
         end
@@ -248,7 +252,10 @@ module KonoUtils
         end
 
         def _failed_update(format)
-          format.html { render :action => :edit }
+          format.html do
+            flash.now[:error] = @object.errors.full_messages.join(',')
+            render :action => :edit
+          end
           format.xml { render :xml => @object.errors, :status => :unprocessable_entity }
           format.inject { render :action => :edit, :layout => false }
         end
