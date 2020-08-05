@@ -2,8 +2,8 @@ module KonoUtils
   class Engine < ::Rails::Engine
 
     require 'rdiscount'
-
     require 'pundit'
+    require 'kono_utils_helpers'
 
 
     initializer 'kono_utils.append_views', :group => :all do |app|

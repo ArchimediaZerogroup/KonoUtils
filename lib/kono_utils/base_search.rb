@@ -1,4 +1,3 @@
-require 'kono_utils/search_attribute'
 module KonoUtils
   ##
   # Classe base per i form di ricerca nel sistema
@@ -19,7 +18,7 @@ module KonoUtils
     class_attribute :_search_model, :_search_attributes, instance_writer: false
     attr_accessor :scope
 
-    class_attribute :search_form_builder_class, default: KonoUtils.configuration.search_form_builder
+    class_attribute :search_form_builder_class, default: nil
 
     #@return [KonoUtils::SearchFormBuilder] istanziato
     attr_reader :search_form_builder
@@ -106,7 +105,7 @@ module KonoUtils
 
         #Definisco delle callbacks per ogni attributo
         define_model_callbacks "search_attr_#{a}".to_sym, "search_attr_#{a}_set".to_sym
-        self._search_attributes += [KonoUtils::SearchAttribute.new(a, options)]
+        self._search_attributes += [SearchAttribute.new(a, options)]
       end
       self._search_attributes.uniq!
     end
@@ -123,7 +122,8 @@ module KonoUtils
       raise UndefinedSearchModelScope.new(search_model) unless search_model.respond_to? :search
       super
       self.scope = self.class._search_model
-      @search_form_builder = search_form_builder_class.new(self)
+      search_builder_class = search_form_builder_class || KonoUtils.configuration.search_form_builder
+      @search_form_builder = search_builder_class.new(self)
     end
 
 

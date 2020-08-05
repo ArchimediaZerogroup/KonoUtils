@@ -1,44 +1,23 @@
-require 'kono_utils/engine' if defined?(::Rails)
+require "zeitwerk"
+loader = Zeitwerk::Loader.for_gem
+loader.ignore("#{__dir__}/generators")
+
+
+if defined?(::Rails)
+  if Rails.gem_version <= Gem::Version.new('4.2.0')
+    # Non facciamo eager load nel caso di nuovi rails
+    translations_concerns = "#{__dir__}/kono_utils/concerns/active_record_translation"
+    loader.do_not_eager_load(translations_concerns)
+  end
+else
+  # non carichiamo l'engine se non presente rails
+  loader.do_not_eager_load("#{__dir__}/kono_utils/engine")
+end
+
+loader.enable_reloading # you need to opt-in before setup
+loader.setup
 
 module KonoUtils
-  extend ActiveSupport::Autoload
-
-  # Classi helpers provenienti dalla gemma KonoUtilsHelper
-  autoload :VirtualModel
-  autoload :Encoder
-  autoload :ParamsHashArray
-  autoload :Percentage
-  autoload :FiscalCode
-  autoload :TmpFile
-
-  # Classi interne
-  autoload :PaginateProxer
-  autoload :SearchFormBuilder
-
-  autoload :ApplicationHelper
-  autoload :ApplicationCoreHelper
-  autoload :ApplicationEnumHelper
-  autoload :BaseEditingHelper
-  autoload :BaseEditingCoreHelper
-  autoload :BaseSearch
-  autoload :Concerns
-
-  class Configuration
-    attr_accessor :google_api_key
-    attr_accessor :application_helper_includes
-    attr_accessor :base_editing_helper_includes
-    attr_accessor :pagination_proxer
-
-    #@return [KonoUtils::SearchFormBuilder]
-    attr_accessor :search_form_builder
-
-    def initialize
-      @application_helper_includes = []
-      @base_editing_helper_includes = []
-      @pagination_proxer = ::KonoUtils::PaginateProxer
-      @search_form_builder = ::KonoUtils::SearchFormBuilder
-    end
-  end
 
   class << self
     attr_writer :configuration
@@ -57,8 +36,4 @@ module KonoUtils
 end
 
 
-if defined?(::Rails)
-  if Rails.gem_version > Gem::Version.new('4.2.0')
-    require 'kono_utils/concerns/active_record_translation'
-  end
-end
+loader.eager_load

@@ -24,13 +24,14 @@ Gem::Specification.new do |s|
   s.add_dependency 'rdiscount' #serve per stampare il markdown del changelog
   s.add_dependency 'coffee-rails'
   s.add_dependency 'sass-rails'
-
   s.add_dependency 'pundit', '~> 2.0'
   s.add_dependency 'kono_utils_helpers'
+  s.add_dependency 'zeitwerk'
 
 
   s.add_development_dependency 'sqlite3'
   s.add_development_dependency 'rails', '> 4.2.4'
   s.add_development_dependency 'rspec-rails'
+  s.add_development_dependency 'listen'
 
 end
