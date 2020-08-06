@@ -12,6 +12,7 @@ PATH
   specs:
     kono_utils (1.0.1)
       actionview
+      active_type
       coffee-rails
       kono_utils_helpers
       pundit (~> 2.0)

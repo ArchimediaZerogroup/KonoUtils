@@ -1,7 +1,9 @@
+require 'active_type'
+
 module KonoUtils
   ##
   # Classe base per i form di ricerca nel sistema
-  class BaseSearch < ActiveType::Object
+  class BaseSearch < ::ActiveType::Object
 
     class UndefinedSearchModel < StandardError
       def initialize(msg = 'Definire nella classe, attraverso set_search_model, il modello da utilizzare come base per la ricerca')
