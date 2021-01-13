@@ -73,7 +73,7 @@ module KonoUtils
         def update
           @object = yield(@object) if block_given?
           respond_to do |format|
-            if @object.update_attributes(clean_params)
+            if @object.update(clean_params)
               _successful_update(format)
             else
               _failed_update(format)
