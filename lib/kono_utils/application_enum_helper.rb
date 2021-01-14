@@ -37,10 +37,11 @@ module KonoUtils
     #         excellent: 4
     # dove in questo caso  estimate_before è il modello e value è il nome del campo enum
     #
-    # @param [ActiveRecord] model class contenente l'enum
-    # @param [Symbol] attribute   che identifica l'attributo dell'enum
-    # @param [nil,String] variant se c'è la variante questa viene inserite _#{variant} dopo il nome del valore
+    # @param model [ActiveRecord::Base]  class contenente l'enum
+    # @param attribute [Symbol]  che identifica l'attributo dell'enum
+    # @param variant [nil,String]  se c'è la variante questa viene inserite _#{variant} dopo il nome del valore
     # @return [String]
+    # @param value [Object] valore
     def enum_translation(model, attribute, value, variant=nil)
       return '' if value.nil?
       variant = "_#{variant}" unless variant.nil?
