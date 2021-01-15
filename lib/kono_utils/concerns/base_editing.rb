@@ -73,7 +73,7 @@ module KonoUtils
         def update
           @object = yield(@object) if block_given?
           respond_to do |format|
-            if @object.update(clean_params)
+            if @object.update(clean_params(@object))
               _successful_update(format)
             else
               _failed_update(format)
@@ -184,9 +184,12 @@ module KonoUtils
 
         end
 
-        def clean_params
-          permitted = policy(base_class.new).permitted_attributes
-          dati = require_params_for!(base_class).permit(permitted)
+        # @param object [ActiveRecord::Base] oggetto per cui estrapolare gli attributi ripuliti, di default utilizza
+        #                                    la classe base
+        # @return [ActionController::Parameters]
+        def clean_params(object = base_class.new)
+          permitted = policy(object).permitted_attributes
+          dati = require_params_for!(object.class).permit(permitted)
           ::Rails.logger.info { "Permitted Attributes: #{permitted.inspect}" }
           ::Rails.logger.info { "Parametri puliti: #{dati.inspect}" }
           dati
