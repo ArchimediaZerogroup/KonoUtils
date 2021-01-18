@@ -1,7 +1,7 @@
 PATH
   remote: ../KonoUtilsHelpers
   specs:
-    kono_utils_helpers (0.1.0.pre.beta.1)
+    kono_utils_helpers (0.1.0.pre.rc.1)
       actionview
       active_type
       activesupport (>= 4.2)
@@ -10,7 +10,7 @@ PATH
 PATH
   remote: .
   specs:
-    kono_utils (1.0.1)
+    kono_utils (1.1.0)
       actionview
       active_type
       coffee-rails
@@ -151,7 +151,7 @@ GEM
     rb-fsevent (0.10.4)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
-    rdiscount (2.2.0.1)
+    rdiscount (2.2.0.2)
     rspec-core (3.9.2)
       rspec-support (~> 3.9.3)
     rspec-expectations (3.9.2)
