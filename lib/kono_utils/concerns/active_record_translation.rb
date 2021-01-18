@@ -23,9 +23,12 @@ module KonoUtils::Concerns
     class_methods do
 
       ##
-      # E' un'alias per il TikalCore::Registration.human_attribute_name(:isee)
-      def han(attr)
-        self.human_attribute_name(attr)
+      # E' un'alias per human_attribute_name di active record
+      # @param [Symbol,String] attr
+      # @param [Hash] options
+      # @return [String]
+      def han(attr, options = {})
+        self.human_attribute_name(attr, options)
       end
 
       ##
@@ -45,3 +48,4 @@ module KonoUtils::Concerns
 
   end
 end
+

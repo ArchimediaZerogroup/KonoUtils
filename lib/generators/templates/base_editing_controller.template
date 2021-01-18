@@ -1,0 +1,3 @@
+class BaseEditingController < <%= @controller_da_cui_derivare %>
+  include KonoUtils::Concerns::BaseEditing
+end

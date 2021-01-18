@@ -1,8 +1,9 @@
-require 'kono_utils/search_attribute'
+require 'active_type'
+
 module KonoUtils
   ##
   # Classe base per i form di ricerca nel sistema
-  class BaseSearch < VirtualModel
+  class BaseSearch < ::ActiveType::Object
 
     class UndefinedSearchModel < StandardError
       def initialize(msg = 'Definire nella classe, attraverso set_search_model, il modello da utilizzare come base per la ricerca')
@@ -10,8 +11,19 @@ module KonoUtils
       end
     end
 
+    class UndefinedSearchModelScope < StandardError
+      def initialize(model)
+        super("La classe #{model.name} non ha definito lo scope search")
+      end
+    end
+
     class_attribute :_search_model, :_search_attributes, instance_writer: false
     attr_accessor :scope
+
+    class_attribute :search_form_builder_class, default: nil
+
+    #@return [KonoUtils::SearchFormBuilder] istanziato
+    attr_reader :search_form_builder
 
     define_model_callbacks :set_scope, :make_query
 
@@ -20,6 +32,18 @@ module KonoUtils
     #
     def self.set_search_model(model)
       self._search_model = model
+    end
+
+    ##
+    # Restituisce il modello di ricerca
+    def search_model
+      self.class._search_model
+    end
+
+    ##
+    # alias method di classe
+    def self.search_model
+      self._search_model
     end
 
     ##
@@ -69,39 +93,25 @@ module KonoUtils
 
         attr_accessor(a.to_sym)
 
-        # instance_variable_set "@#{a}".to_sym, nil
-        #
-        # unless method_defined? a.to_sym
         define_method(a.to_sym) do
           run_callbacks "search_attr_#{a}" do
-            # logger.debug { "Chiamata a metodo virtuale #{a} " }
             instance_variable_get "@#{a}".to_sym
           end
         end
-        # end
-        #
-        # unless method_defined? "#{a}=".to_sym
         define_method("#{a}=".to_sym) do |*args|
           run_callbacks "search_attr_#{a}_set" do
-            # logger.debug { "Chiamata a metodo virtuale #{a}= -> #{args.inspect}" }
             instance_variable_set "@#{a}".to_sym, *args
           end
         end
-        # end
 
 
         #Definisco delle callbacks per ogni attributo
         define_model_callbacks "search_attr_#{a}".to_sym, "search_attr_#{a}_set".to_sym
-        self._search_attributes += [KonoUtils::SearchAttribute.new(a, options)]
+        self._search_attributes += [SearchAttribute.new(a, options)]
       end
       self._search_attributes.uniq!
     end
 
-    ##
-    # Restituisce il modello di ricerca
-    def search_model
-      self.class._search_model
-    end
 
     ##
     # Attributi di ricerca
@@ -111,15 +121,18 @@ module KonoUtils
 
     def initialize(attributes = nil)
       raise UndefinedSearchModel if search_model.nil?
+      raise UndefinedSearchModelScope.new(search_model) unless search_model.respond_to? :search
       super
       self.scope = self.class._search_model
+      search_builder_class = search_form_builder_class || KonoUtils.configuration.search_form_builder
+      @search_form_builder = search_builder_class.new(self)
     end
 
 
     ##
     #  deve indicarmi se i dati della ricerca sono stati inseriti
     def data_loaded?
-      get_query_params.length>0
+      get_query_params.length > 0
     end
 
     ##
@@ -147,7 +160,7 @@ module KonoUtils
     def get_query_params
       out = {}
       search_attributes.each do |val|
-        out[val.field]=self.send(val.field) unless self.send(val.field).blank?
+        out[val.field] = self.send(val.field) unless self.send(val.field).blank?
       end
 
       out

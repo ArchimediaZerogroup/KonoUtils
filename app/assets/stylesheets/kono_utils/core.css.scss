@@ -1,0 +1,24 @@
+
+.kono_delete_button, .kono_edit_button {
+  margin: 1px;
+  &.align-right {
+    float: right;
+  }
+  &.align-left {
+    float: left;
+  }
+}
+
+
+//classi per una spaziatura verticale , utilizzare
+// passando la classe generale v-space e poi il valore scelto: space-x1
+// ogni valore dello spacer rappresente 0.2em
+//ES:
+// <div class="kono-v-spacer space-x2"></div>     => 0.4em
+.kono-v-spacer {
+  @for $i from 1 through 20 {
+    &.space-x#{$i} {
+      height: 0.2em * $i;
+    }
+  }
+}

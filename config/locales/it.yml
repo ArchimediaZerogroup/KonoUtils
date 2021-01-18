@@ -16,3 +16,5 @@ it:
         created: "%{model} creato correttamente."
         updated: "%{model} aggiornato correttamente."
         destroyed: "%{model} è stato correttamente cancellato."
+  kono_utils:
+    user_not_authorized: Utente non autorizzato a modificare %{model}

@@ -21,21 +21,17 @@ Gem::Specification.new do |s|
   s.test_files = files.grep(%r{^(spec)/})
 
   s.add_dependency 'actionview'
-  s.add_dependency 'font-awesome-rails'
-  s.add_dependency 'underscore-rails'
-  s.add_dependency 'active_type'
-  s.add_dependency 'codice-fiscale'
-  s.add_dependency 'rails-jquery-autocomplete', '~>1.0.3'
-  s.add_dependency 'formtastic-bootstrap', '~>3.1.1'
-  s.add_dependency 'momentjs-rails', '>= 2.9.0'
-  s.add_dependency 'bootstrap3-datetimepicker-rails', '~> 4.17.42'
-  s.add_dependency 'will_paginate', '~> 3.1.0'
-  s.add_dependency 'will_paginate-bootstrap'
   s.add_dependency 'rdiscount' #serve per stampare il markdown del changelog
   s.add_dependency 'coffee-rails'
+  s.add_dependency 'sass-rails'
+  s.add_dependency 'pundit', '~> 2.0'
+  s.add_dependency 'kono_utils_helpers'
+  s.add_dependency 'zeitwerk'
+  s.add_dependency 'active_type'
 
   s.add_development_dependency 'sqlite3'
   s.add_development_dependency 'rails', '> 4.2.4'
   s.add_development_dependency 'rspec-rails'
+  s.add_development_dependency 'listen'
 
 end
