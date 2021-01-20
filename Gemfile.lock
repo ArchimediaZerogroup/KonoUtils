@@ -18,7 +18,6 @@ PATH
       pundit (~> 2.0)
       rdiscount
       sass-rails
-      zeitwerk
 
 GEM
   remote: https://rubygems.org/

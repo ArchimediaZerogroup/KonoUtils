@@ -26,7 +26,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'sass-rails'
   s.add_dependency 'pundit', '~> 2.0'
   s.add_dependency 'kono_utils_helpers'
-  s.add_dependency 'zeitwerk'
   s.add_dependency 'active_type'
 
   s.add_development_dependency 'sqlite3'
