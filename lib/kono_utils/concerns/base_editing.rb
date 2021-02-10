@@ -5,7 +5,6 @@ module KonoUtils
     module BaseEditing
       extend ActiveSupport::Concern
 
-
       included do
 
         include Pundit
@@ -21,6 +20,8 @@ module KonoUtils
         helper_method :new_custom_polymorphic_path
         helper_method :edit_custom_polymorphic_path
         helper_method :index_custom_polymorphic_path
+        helper_method :kono_user
+
         after_action :check_errors, only: [:create, :update], if: -> { ::Rails.env.development? }
 
         rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
@@ -146,6 +147,18 @@ module KonoUtils
           flash[:alert] = t('.user_not_authorized', :model => @object.mn,
                             default: t('kono_utils.user_not_authorized', :model => @object.mn, default: "You are not authorized to perform this action."))
           redirect_to(request.referrer || root_path)
+        end
+
+        ##
+        # Come per pundit, potrebbe essere il caso in cui l'utente autenticato non è quello standard di device ma uno
+        # con modello differente, quindi utilizziamo la stessa configurazione di pundit per avere l'utente da utilizzare
+        # nelle authorizzazioni. Centralizziamo questa cosa in questa funzione di modo che possiamo cambiarla in un futuro
+        # staccandoci dalle logiche di pundit.
+        # @example
+        #   Sovrascrivere questa funzione restituendo l'utente corretto che viene sottoposto a pundit
+        # @return [Object] probabilmente un active-record di tipo User
+        def kono_user
+          pundit_user
         end
 
         def load_object

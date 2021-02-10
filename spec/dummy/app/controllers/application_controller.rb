@@ -8,6 +8,8 @@ class ApplicationController < ActionController::Base
 
   ##
   # Semplificazione in sviluppo di un possibile utente
+  # come se avessimo installato un devise.
+  # Da qua pundit e kono hanno i loro metodi/helper per avere l'informazione dell'utente: pundit_user e kono_user
   def current_user
     User.first || User.create(username: 'mario', surname: 'rossi',email:"example@tld.it")
   end
