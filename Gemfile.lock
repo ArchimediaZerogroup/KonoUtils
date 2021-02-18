@@ -10,7 +10,7 @@ PATH
 PATH
   remote: .
   specs:
-    kono_utils (1.1.2)
+    kono_utils (1.1.3)
       actionview
       active_type
       coffee-rails
