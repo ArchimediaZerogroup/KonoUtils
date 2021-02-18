@@ -1,6 +1,5 @@
 require 'active_support/concern'
 
-
 module KonoUtils::Concerns
   ##
   # Includendo questo modulo nell'application record, possiamo andare injettare metodi necessari per la gestione
@@ -38,11 +37,13 @@ module KonoUtils::Concerns
         callback = "make_#{attr}".to_sym
         attr_accessor attr
 
-        after_save callback, if: attr
+        after_save callback
 
         define_method(callback) do
-          if self.send(field_name.to_sym).attached?
-            self.send(field_name.to_sym).purge_later
+          if self.send(attr.to_sym) == '1'
+            if self.send(field_name.to_sym).attached?
+              self.send(field_name.to_sym).purge_later
+            end
           end
         end
 
